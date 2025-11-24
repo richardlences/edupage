@@ -1,0 +1,1663 @@
+INFO:     Will watch for changes in these directories: ['/home/richard/prog/edupage-antigravity']
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     Started reloader process [28901] using StatReload
+INFO:     Started server process [28904]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:46638 - "POST /auth/login HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 85, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/auth.py", line 25, in login
+    if service.login(request.username, request.password, request.subdomain):
+       ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 12, in login
+    self.edupage.login(username, password, subdomain)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 69, in login
+    return Login(self).login(username, password, subdomain)
+           ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/login.py", line 197, in login
+    self.__parse_login_data(data)
+    ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/login.py", line 125, in __parse_login_data
+    data.split("userhome(", 1)[1]
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~^^^
+IndexError: list index out of range
+INFO:     127.0.0.1:58562 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:58572 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58572 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58562 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51958 - "OPTIONS /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51966 - "OPTIONS /lunches/order?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51958 - "POST /lunches/order?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51958 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51332 - "OPTIONS /lunches/cancel?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51348 - "POST /lunches/cancel?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51348 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51348 - "POST /lunches/order?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51348 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43206 - "POST /lunches/cancel?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43206 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:33810 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48672 - "OPTIONS /social/rate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48686 - "POST /social/rate HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:48686 - "POST /social/rate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48686 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55830 - "POST /social/rate HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:37636 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37636 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:37636 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37636 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:47518 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48408 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [28904]
+INFO:     Started server process [30321]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:46078 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:35972 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:36704 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36704 - "OPTIONS /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:36704 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36704 - "OPTIONS /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:36706 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:36706 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:36706 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:36706 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58886 - "OPTIONS /lunches/order?meal_index=1&day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58892 - "POST /lunches/order?meal_index=1&day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58892 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:43394 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43394 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44812 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44812 - "OPTIONS /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44826 - "POST /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44826 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54036 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:54050 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:54050 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/edupage_service.py", line 45, in get_lunches
+    return self.edupage.get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/__init__.py", line 176, in get_meals
+    return Lunches(self).get_meals(date)
+           ~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/module.py", line 100, in __impl
+    return method(self, *method_args, **method_kwargs)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 235, in get_meals
+    lunch = self.parse_meal("2", meals.get("2"), boarder_id, date)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py", line 178, in parse_meal
+    [quality, quantity] = rating
+    ^^^^^^^^^^^^^^^^^^^
+TypeError: cannot unpack non-iterable NoneType object
+Error fetching lunches: cannot unpack non-iterable NoneType object
+INFO:     127.0.0.1:54050 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54050 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54036 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [30321]
+INFO:     Started server process [31586]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31586]
+INFO:     Started server process [31698]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31698]
+INFO:     Started server process [31838]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'patch_edupage_api.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31838]
+INFO:     Started server process [31864]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+WARNING:  StatReload detected changes in 'backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31864]
+INFO:     Started server process [31894]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47566 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51104 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53666 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39022 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39022 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44696 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44696 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [31894]
+INFO:     Started server process [32652]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47176 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47190 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51736 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56456 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56470 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46270 - "OPTIONS /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46272 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46272 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46272 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46272 - "OPTIONS /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46270 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46270 - "OPTIONS /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46272 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:35230 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42182 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34328 - "OPTIONS /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34330 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:56352 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60148 - "OPTIONS /lunches/order?meal_index=1&day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60164 - "POST /lunches/order?meal_index=1&day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60164 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47856 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49598 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49598 - "OPTIONS /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49602 - "POST /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:49602 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52734 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52734 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52734 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52734 - "POST /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52734 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [32652]
+INFO:     Started server process [33953]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name=' Polievka:   Hovädzia s niťovkami                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ', number='None'
+DEBUG: Meal 1: name='Bravčový guláš maďarský, domáca kysnutá knedľa ', number='1'
+DEBUG: Comparing '1' == 'A' -> False
+DEBUG: Meal 2: name='Karfiolový mozoček, zemiaky varené s petržlenovou vňaťou, šalát uhorkový ', number='2'
+DEBUG: Comparing '2' == 'A' -> False
+DEBUG: Meal 3: name='Grécky ovocný šalát, tmavý rožok 1 ks                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ', number='3'
+DEBUG: Comparing '3' == 'A' -> False
+DEBUG: Meal 4: name='Kurací plátok na póre, pečená zelenina (cuketa,šampiňóny)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ', number='4'
+DEBUG: Comparing '4' == 'A' -> False
+DEBUG: Meal 5: name='Kurací plátok na póre, ryža dusená, šalát uhorkový ', number='5'
+DEBUG: Comparing '5' == 'A' -> False
+DEBUG: Meal 6: name='Diéta - Karfiolový mozoček, zemiaky varené s petržlenovou vňaťou, 7 - bez lakt.', number='6'
+DEBUG: Comparing '6' == 'A' -> False
+INFO:     127.0.0.1:53080 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53080 - "POST /lunches/order?meal_index=1&day=2025-11-19 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name=' Polievka:   Hovädzia s niťovkami                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ', number='None'
+DEBUG: Meal 1: name='Bravčový guláš maďarský, domáca kysnutá knedľa ', number='1'
+DEBUG: Comparing '1' == 'A' -> False
+DEBUG: Meal 2: name='Karfiolový mozoček, zemiaky varené s petržlenovou vňaťou, šalát uhorkový ', number='2'
+DEBUG: Comparing '2' == 'A' -> False
+DEBUG: Meal 3: name='Grécky ovocný šalát, tmavý rožok 1 ks                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ', number='3'
+DEBUG: Comparing '3' == 'A' -> False
+DEBUG: Meal 4: name='Kurací plátok na póre, pečená zelenina (cuketa,šampiňóny)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ', number='4'
+DEBUG: Comparing '4' == 'A' -> False
+DEBUG: Meal 5: name='Kurací plátok na póre, ryža dusená, šalát uhorkový ', number='5'
+DEBUG: Comparing '5' == 'A' -> False
+DEBUG: Meal 6: name='Diéta - Karfiolový mozoček, zemiaky varené s petržlenovou vňaťou, 7 - bez lakt.', number='6'
+DEBUG: Comparing '6' == 'A' -> False
+INFO:     127.0.0.1:53080 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Portugalská ', number='None'
+DEBUG: Meal 1: name='Námornícke hovädzie mäso, ryža dusená, kyslá uhorka ', number='1'
+DEBUG: Comparing '1' == 'A' -> False
+DEBUG: Meal 2: name='Tekvicový prívarok, varené vajcia, zemiaky varené', number='2'
+DEBUG: Comparing '2' == 'A' -> False
+DEBUG: Meal 3: name='Kurací šalát s bulgurom (cícer,kukurica,zelenina) ', number='3'
+DEBUG: Comparing '3' == 'A' -> False
+DEBUG: Meal 4: name='Bravčový plátok na slanine a horčici, dusená zelenina (brokolica,lusky) ', number='4'
+DEBUG: Comparing '4' == 'A' -> False
+DEBUG: Meal 5: name='Bravčový plátok na slanine a horčici, zemiaky šťuchané, kyslá uhorka ', number='5'
+DEBUG: Comparing '5' == 'A' -> False
+DEBUG: Meal 6: name='Diéta - Námornícke hovädzie mäso, ryža dusená,kyslá uhorka', number='6'
+DEBUG: Comparing '6' == 'A' -> False
+INFO:     127.0.0.1:53080 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = X
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Gulášová, chlieb ', number='None'
+DEBUG: Meal 1: name='Kurací rezeň vo vajci, ryža dusená, cviklový šalát ', number='1'
+DEBUG: Comparing '1' == 'X' -> False
+DEBUG: Meal 2: name='Osúch jablkový ', number='2'
+DEBUG: Comparing '2' == 'X' -> False
+DEBUG: Meal 3: name='Zemiakový šalát s kyslými rybami (olivy,cibuľa,dresing) ', number='3'
+DEBUG: Comparing '3' == 'X' -> False
+DEBUG: Meal 4: name='Kurací rezeň vo vajci, čerstvá zelenina (ľad.šalát,paradajka,kukurica, oliv. olej) ', number='4'
+DEBUG: Comparing '4' == 'X' -> False
+DEBUG: Meal 5: name='Bravčové stehno Juhoslovanské, zemiaky varené ', number='5'
+DEBUG: Comparing '5' == 'X' -> False
+DEBUG: Meal 6: name='Diéta -  Bravčové stehno Juhoslovanské, zemiaky varené ', number='6'
+DEBUG: Comparing '6' == 'X' -> False
+INFO:     127.0.0.1:53080 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53080 - "POST /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Gulášová, chlieb ', number='None'
+DEBUG: Meal 1: name='Kurací rezeň vo vajci, ryža dusená, cviklový šalát ', number='1'
+DEBUG: Comparing '1' == 'A' -> False
+DEBUG: Meal 2: name='Osúch jablkový ', number='2'
+DEBUG: Comparing '2' == 'A' -> False
+DEBUG: Meal 3: name='Zemiakový šalát s kyslými rybami (olivy,cibuľa,dresing) ', number='3'
+DEBUG: Comparing '3' == 'A' -> False
+DEBUG: Meal 4: name='Kurací rezeň vo vajci, čerstvá zelenina (ľad.šalát,paradajka,kukurica, oliv. olej) ', number='4'
+DEBUG: Comparing '4' == 'A' -> False
+DEBUG: Meal 5: name='Bravčové stehno Juhoslovanské, zemiaky varené ', number='5'
+DEBUG: Comparing '5' == 'A' -> False
+DEBUG: Meal 6: name='Diéta -  Bravčové stehno Juhoslovanské, zemiaky varené ', number='6'
+DEBUG: Comparing '6' == 'A' -> False
+INFO:     127.0.0.1:53080 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name=' Polievka:   Hovädzia s niťovkami                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             ', number='None'
+DEBUG: Meal 1: name='Bravčový guláš maďarský, domáca kysnutá knedľa ', number='1'
+DEBUG: Comparing '1' == 'A' -> False
+DEBUG: Meal 2: name='Karfiolový mozoček, zemiaky varené s petržlenovou vňaťou, šalát uhorkový ', number='2'
+DEBUG: Comparing '2' == 'A' -> False
+DEBUG: Meal 3: name='Grécky ovocný šalát, tmavý rožok 1 ks                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ', number='3'
+DEBUG: Comparing '3' == 'A' -> False
+DEBUG: Meal 4: name='Kurací plátok na póre, pečená zelenina (cuketa,šampiňóny)                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ', number='4'
+DEBUG: Comparing '4' == 'A' -> False
+DEBUG: Meal 5: name='Kurací plátok na póre, ryža dusená, šalát uhorkový ', number='5'
+DEBUG: Comparing '5' == 'A' -> False
+DEBUG: Meal 6: name='Diéta - Karfiolový mozoček, zemiaky varené s petržlenovou vňaťou, 7 - bez lakt.', number='6'
+DEBUG: Comparing '6' == 'A' -> False
+INFO:     127.0.0.1:53080 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [33953]
+INFO:     Started server process [34215]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name=' Polievka:   Hovädzia s niťovkami                 ...', number='None'
+DEBUG: Letter 'A' -> number '1', comparing with menu '' -> False
+DEBUG: Meal 1: name='Bravčový guláš maďarský, domáca kysnutá knedľa ...', number='1'
+DEBUG: Letter 'A' -> number '1', comparing with menu '1' -> True
+DEBUG: Meal 2: name='Karfiolový mozoček, zemiaky varené s petržlenovou ...', number='2'
+DEBUG: Letter 'A' -> number '1', comparing with menu '2' -> False
+DEBUG: Meal 3: name='Grécky ovocný šalát, tmavý rožok 1 ks             ...', number='3'
+DEBUG: Letter 'A' -> number '1', comparing with menu '3' -> False
+DEBUG: Meal 4: name='Kurací plátok na póre, pečená zelenina (cuketa,šam...', number='4'
+DEBUG: Letter 'A' -> number '1', comparing with menu '4' -> False
+DEBUG: Meal 5: name='Kurací plátok na póre, ryža dusená, šalát uhorkový...', number='5'
+DEBUG: Letter 'A' -> number '1', comparing with menu '5' -> False
+DEBUG: Meal 6: name='Diéta - Karfiolový mozoček, zemiaky varené s petrž...', number='6'
+DEBUG: Letter 'A' -> number '1', comparing with menu '6' -> False
+INFO:     127.0.0.1:33562 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Portugalská ...', number='None'
+DEBUG: Letter 'A' -> number '1', comparing with menu '' -> False
+DEBUG: Meal 1: name='Námornícke hovädzie mäso, ryža dusená, kyslá uhork...', number='1'
+DEBUG: Letter 'A' -> number '1', comparing with menu '1' -> True
+DEBUG: Meal 2: name='Tekvicový prívarok, varené vajcia, zemiaky varené...', number='2'
+DEBUG: Letter 'A' -> number '1', comparing with menu '2' -> False
+DEBUG: Meal 3: name='Kurací šalát s bulgurom (cícer,kukurica,zelenina) ...', number='3'
+DEBUG: Letter 'A' -> number '1', comparing with menu '3' -> False
+DEBUG: Meal 4: name='Bravčový plátok na slanine a horčici, dusená zelen...', number='4'
+DEBUG: Letter 'A' -> number '1', comparing with menu '4' -> False
+DEBUG: Meal 5: name='Bravčový plátok na slanine a horčici, zemiaky šťuc...', number='5'
+DEBUG: Letter 'A' -> number '1', comparing with menu '5' -> False
+DEBUG: Meal 6: name='Diéta - Námornícke hovädzie mäso, ryža dusená,kysl...', number='6'
+DEBUG: Letter 'A' -> number '1', comparing with menu '6' -> False
+INFO:     127.0.0.1:33562 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Gulášová, chlieb ...', number='None'
+DEBUG: Letter 'A' -> number '1', comparing with menu '' -> False
+DEBUG: Meal 1: name='Kurací rezeň vo vajci, ryža dusená, cviklový šalát...', number='1'
+DEBUG: Letter 'A' -> number '1', comparing with menu '1' -> True
+DEBUG: Meal 2: name='Osúch jablkový ...', number='2'
+DEBUG: Letter 'A' -> number '1', comparing with menu '2' -> False
+DEBUG: Meal 3: name='Zemiakový šalát s kyslými rybami (olivy,cibuľa,dre...', number='3'
+DEBUG: Letter 'A' -> number '1', comparing with menu '3' -> False
+DEBUG: Meal 4: name='Kurací rezeň vo vajci, čerstvá zelenina (ľad.šalát...', number='4'
+DEBUG: Letter 'A' -> number '1', comparing with menu '4' -> False
+DEBUG: Meal 5: name='Bravčové stehno Juhoslovanské, zemiaky varené ...', number='5'
+DEBUG: Letter 'A' -> number '1', comparing with menu '5' -> False
+DEBUG: Meal 6: name='Diéta -  Bravčové stehno Juhoslovanské, zemiaky va...', number='6'
+DEBUG: Letter 'A' -> number '1', comparing with menu '6' -> False
+INFO:     127.0.0.1:48014 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48014 - "OPTIONS /lunches/cancel?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43980 - "POST /lunches/cancel?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = X
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Gulášová, chlieb ...', number='None'
+DEBUG: Meal 1: name='Kurací rezeň vo vajci, ryža dusená, cviklový šalát...', number='1'
+DEBUG: Meal 2: name='Osúch jablkový ...', number='2'
+DEBUG: Meal 3: name='Zemiakový šalát s kyslými rybami (olivy,cibuľa,dre...', number='3'
+DEBUG: Meal 4: name='Kurací rezeň vo vajci, čerstvá zelenina (ľad.šalát...', number='4'
+DEBUG: Meal 5: name='Bravčové stehno Juhoslovanské, zemiaky varené ...', number='5'
+DEBUG: Meal 6: name='Diéta -  Bravčové stehno Juhoslovanské, zemiaky va...', number='6'
+INFO:     127.0.0.1:43980 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:   Portugalská ...', number='None'
+DEBUG: Letter 'A' -> number '1', comparing with menu '' -> False
+DEBUG: Meal 1: name='Námornícke hovädzie mäso, ryža dusená, kyslá uhork...', number='1'
+DEBUG: Letter 'A' -> number '1', comparing with menu '1' -> True
+DEBUG: Meal 2: name='Tekvicový prívarok, varené vajcia, zemiaky varené...', number='2'
+DEBUG: Letter 'A' -> number '1', comparing with menu '2' -> False
+DEBUG: Meal 3: name='Kurací šalát s bulgurom (cícer,kukurica,zelenina) ...', number='3'
+DEBUG: Letter 'A' -> number '1', comparing with menu '3' -> False
+DEBUG: Meal 4: name='Bravčový plátok na slanine a horčici, dusená zelen...', number='4'
+DEBUG: Letter 'A' -> number '1', comparing with menu '4' -> False
+DEBUG: Meal 5: name='Bravčový plátok na slanine a horčici, zemiaky šťuc...', number='5'
+DEBUG: Letter 'A' -> number '1', comparing with menu '5' -> False
+DEBUG: Meal 6: name='Diéta - Námornícke hovädzie mäso, ryža dusená,kysl...', number='6'
+DEBUG: Letter 'A' -> number '1', comparing with menu '6' -> False
+INFO:     127.0.0.1:58582 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name=' Polievka:   Hovädzia s niťovkami                 ...', number='None'
+DEBUG: Letter 'A' -> number '1', comparing with menu '' -> False
+DEBUG: Meal 1: name='Bravčový guláš maďarský, domáca kysnutá knedľa ...', number='1'
+DEBUG: Letter 'A' -> number '1', comparing with menu '1' -> True
+DEBUG: Meal 2: name='Karfiolový mozoček, zemiaky varené s petržlenovou ...', number='2'
+DEBUG: Letter 'A' -> number '1', comparing with menu '2' -> False
+DEBUG: Meal 3: name='Grécky ovocný šalát, tmavý rožok 1 ks             ...', number='3'
+DEBUG: Letter 'A' -> number '1', comparing with menu '3' -> False
+DEBUG: Meal 4: name='Kurací plátok na póre, pečená zelenina (cuketa,šam...', number='4'
+DEBUG: Letter 'A' -> number '1', comparing with menu '4' -> False
+DEBUG: Meal 5: name='Kurací plátok na póre, ryža dusená, šalát uhorkový...', number='5'
+DEBUG: Letter 'A' -> number '1', comparing with menu '5' -> False
+DEBUG: Meal 6: name='Diéta - Karfiolový mozoček, zemiaky varené s petrž...', number='6'
+DEBUG: Letter 'A' -> number '1', comparing with menu '6' -> False
+INFO:     127.0.0.1:58582 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = X
+DEBUG: Total meals from API: 12
+DEBUG: Meal 0: name='Polievka:  Kalerábová                             ...', number='None'
+DEBUG: Meal 1: name='Morčací plátok prírodný, ryža dusená, miešaný šalá...', number='1'
+DEBUG: Meal 2: name='Granadiersky pochod, kyslá uhorka                 ...', number='2'
+DEBUG: Meal 3: name='Neapolský cestovinový šalát (šunka, syr, bazalka, ...', number='3'
+DEBUG: Meal 4: name='Morčací plátok prírodný, čerstvá zelenina (ľadový ...', number='4'
+DEBUG: Meal 5: name=' Zemiakové knedle plnené mäsom, dusená kyslá kapus...', number='5'
+DEBUG: Meal 6: name='Diéta - Šišky bezlepkové s džemom 7-bez lakt....', number='6'
+INFO:     127.0.0.1:58582 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = X
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name='  Polievka:  Mrkvová s hráškom a krupicovými haluš...', number='None'
+DEBUG: Meal 1: name='Kuracie prsia s ananásom, ryža dusená, šalát z čín...', number='1'
+DEBUG: Meal 2: name='Šišky s džemom (220/260/300).                     ...', number='2'
+DEBUG: Meal 3: name='Zeleninový šalát s dvomi druhmi syra, tmavý rožok ...', number='3'
+DEBUG: Meal 4: name='Kuracie prsia s ananásom, dusená zelenina (karfiol...', number='4'
+DEBUG: Meal 5: name='Bravčové stehno bratislavské, cestovina ...', number='5'
+DEBUG: Meal 6: name='Diéta -  Kuracie prsia s ananásom, ryža dusená, ša...', number='6'
+INFO:     127.0.0.1:58582 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = X
+DEBUG: Total meals from API: 12
+DEBUG: Meal 0: name='Polievka:  Kalerábová                             ...', number='None'
+DEBUG: Meal 1: name='Morčací plátok prírodný, ryža dusená, miešaný šalá...', number='1'
+DEBUG: Meal 2: name='Granadiersky pochod, kyslá uhorka                 ...', number='2'
+DEBUG: Meal 3: name='Neapolský cestovinový šalát (šunka, syr, bazalka, ...', number='3'
+DEBUG: Meal 4: name='Morčací plátok prírodný, čerstvá zelenina (ľadový ...', number='4'
+DEBUG: Meal 5: name=' Zemiakové knedle plnené mäsom, dusená kyslá kapus...', number='5'
+DEBUG: Meal 6: name='Diéta - Šišky bezlepkové s džemom 7-bez lakt....', number='6'
+INFO:     127.0.0.1:58582 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+DEBUG: ordered_meal = A
+DEBUG: Total meals from API: 7
+DEBUG: Meal 0: name=' Polievka:   Hovädzia s niťovkami                 ...', number='None'
+DEBUG: Letter 'A' -> number '1', comparing with menu '' -> False
+DEBUG: Meal 1: name='Bravčový guláš maďarský, domáca kysnutá knedľa ...', number='1'
+DEBUG: Letter 'A' -> number '1', comparing with menu '1' -> True
+DEBUG: Meal 2: name='Karfiolový mozoček, zemiaky varené s petržlenovou ...', number='2'
+DEBUG: Letter 'A' -> number '1', comparing with menu '2' -> False
+DEBUG: Meal 3: name='Grécky ovocný šalát, tmavý rožok 1 ks             ...', number='3'
+DEBUG: Letter 'A' -> number '1', comparing with menu '3' -> False
+DEBUG: Meal 4: name='Kurací plátok na póre, pečená zelenina (cuketa,šam...', number='4'
+DEBUG: Letter 'A' -> number '1', comparing with menu '4' -> False
+DEBUG: Meal 5: name='Kurací plátok na póre, ryža dusená, šalát uhorkový...', number='5'
+DEBUG: Letter 'A' -> number '1', comparing with menu '5' -> False
+DEBUG: Meal 6: name='Diéta - Karfiolový mozoček, zemiaky varené s petrž...', number='6'
+DEBUG: Letter 'A' -> number '1', comparing with menu '6' -> False
+INFO:     127.0.0.1:58582 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34215]
+INFO:     Started server process [34598]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:47030 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47030 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47030 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:47030 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39122 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39130 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39130 - "OPTIONS /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39122 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39122 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39122 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39130 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39130 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53566 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53566 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53566 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [34598]
+INFO:     Started server process [35968]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:43046 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:43060 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:52472 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:39024 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39028 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:39024 - "OPTIONS /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39024 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:60708 - "OPTIONS /lunches/?day=2025-11-24 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60724 - "GET /lunches/?day=2025-11-24 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:60708 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:60736 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:60744 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:60746 - "OPTIONS /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:60762 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+INFO:     127.0.0.1:60746 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 500 Internal Server Error
+ERROR:    Exception in ASGI application
+Traceback (most recent call last):
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/protocols/http/h11_impl.py", line 403, in run_asgi
+    result = await app(  # type: ignore[func-returns-value]
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        self.scope, self.receive, self.send
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/middleware/proxy_headers.py", line 60, in __call__
+    return await self.app(scope, receive, send)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/applications.py", line 1134, in __call__
+    await super().__call__(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/applications.py", line 107, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 186, in __call__
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 93, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/cors.py", line 144, in simple_response
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/middleware/exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/middleware/asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 716, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 736, in app
+    await route.handle(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/routing.py", line 290, in handle
+    await self.app(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 125, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 111, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 391, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/fastapi/routing.py", line 292, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/starlette/concurrency.py", line 32, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/to_thread.py", line 56, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 2485, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/anyio/_backends/_asyncio.py", line 976, in run
+    result = context.run(func, *args)
+  File "/home/richard/prog/edupage-antigravity/backend/routers/lunches.py", line 102, in get_lunches
+    "can_be_changed_until": can_be_changed_until.isoformat() if can_be_changed_until else None  # Deadline for changes
+                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'str' object has no attribute 'isoformat'. Did you mean: 'format'?
+WARNING:  StatReload detected changes in 'backend/routers/lunches.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [35968]
+INFO:     Started server process [36735]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:35346 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52412 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52420 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52420 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52420 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45304 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53076 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:53078 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:37548 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:40878 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46838 - "OPTIONS /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46848 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46848 - "OPTIONS /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46838 - "POST /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46838 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34782 - "OPTIONS /lunches/cancel?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34794 - "POST /lunches/cancel?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:34794 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48234 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48242 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:48242 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51486 - "OPTIONS /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51496 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51496 - "OPTIONS /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51486 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51486 - "OPTIONS /lunches/?day=2025-11-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51496 - "GET /lunches/?day=2025-11-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51496 - "OPTIONS /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51486 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42772 - "OPTIONS /social/rate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42784 - "POST /social/rate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:42784 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46484 - "OPTIONS /social/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46484 - "POST /social/upload HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:43500 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58060 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58060 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58060 - "GET /lunches/?day=2025-11-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58060 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:58060 - "POST /social/upload HTTP/1.1" 422 Unprocessable Content
+INFO:     127.0.0.1:35932 - "POST /social/upload HTTP/1.1" 422 Unprocessable Content
+WARNING:  StatReload detected changes in 'backend/routers/social.py'. Reloading...
+INFO:     Shutting down
+INFO:     Waiting for application shutdown.
+INFO:     Application shutdown complete.
+INFO:     Finished server process [36735]
+Process SpawnProcess-14:
+Traceback (most recent call last):
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 313, in _bootstrap
+    self.run()
+    ~~~~~~~~^^
+  File "/usr/lib/python3.13/multiprocessing/process.py", line 108, in run
+    self._target(*self._args, **self._kwargs)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/_subprocess.py", line 80, in subprocess_started
+    target(sockets=sockets)
+    ~~~~~~^^^^^^^^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/server.py", line 67, in run
+    return asyncio_run(self.serve(sockets=sockets), loop_factory=self.config.get_loop_factory())
+  File "/usr/lib/python3.13/asyncio/runners.py", line 195, in run
+    return runner.run(main)
+           ~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/runners.py", line 118, in run
+    return self._loop.run_until_complete(task)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^
+  File "/usr/lib/python3.13/asyncio/base_events.py", line 725, in run_until_complete
+    return future.result()
+           ~~~~~~~~~~~~~^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/server.py", line 71, in serve
+    await self._serve(sockets)
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/server.py", line 78, in _serve
+    config.load()
+    ~~~~~~~~~~~^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/config.py", line 439, in load
+    self.loaded_app = import_from_string(self.app)
+                      ~~~~~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/richard/prog/edupage-antigravity/backend/venv/lib/python3.13/site-packages/uvicorn/importer.py", line 19, in import_from_string
+    module = importlib.import_module(module_str)
+  File "/usr/lib/python3.13/importlib/__init__.py", line 88, in import_module
+    return _bootstrap._gcd_import(name[level:], package, level)
+           ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen importlib._bootstrap>", line 1387, in _gcd_import
+  File "<frozen importlib._bootstrap>", line 1360, in _find_and_load
+  File "<frozen importlib._bootstrap>", line 1331, in _find_and_load_unlocked
+  File "<frozen importlib._bootstrap>", line 935, in _load_unlocked
+  File "<frozen importlib._bootstrap_external>", line 1027, in exec_module
+  File "<frozen importlib._bootstrap>", line 488, in _call_with_frames_removed
+  File "/home/richard/prog/edupage-antigravity/backend/main.py", line 20, in <module>
+    from .routers import auth, lunches, social
+  File "/home/richard/prog/edupage-antigravity/backend/routers/social.py", line 5, in <module>
+    @router.post("/upload")
+     ^^^^^^
+NameError: name 'router' is not defined
+WARNING:  StatReload detected changes in 'backend/routers/social.py'. Reloading...
+INFO:     Started server process [39171]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     127.0.0.1:39104 - "POST /social/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39104 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39114 - "GET /uploads/a5702337-db06-4588-83e9-08dff5c718aa_fallen.jpeg HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45748 - "OPTIONS /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45752 - "POST /auth/login HTTP/1.1" 200 OK
+INFO:     127.0.0.1:38246 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:46478 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45686 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45686 - "POST /lunches/order?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45686 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45686 - "POST /lunches/cancel?meal_index=1&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:45686 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39208 - "OPTIONS /lunches/order?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39220 - "POST /lunches/order?meal_index=2&day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39220 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54442 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54442 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54442 - "GET /lunches/?day=2025-11-21 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39894 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39894 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39894 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39894 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39894 - "GET /lunches/?day=2025-11-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39894 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44126 - "GET /uploads/a5702337-db06-4588-83e9-08dff5c718aa_fallen.jpeg HTTP/1.1" 304 Not Modified
+INFO:     127.0.0.1:55260 - "POST /social/upload HTTP/1.1" 200 OK
+INFO:     127.0.0.1:55260 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39862 - "POST /social/rate HTTP/1.1" 200 OK
+INFO:     127.0.0.1:39862 - "GET /lunches/?day=2025-11-13 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44404 - "GET /lunches/?day=2025-11-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44404 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:44404 - "GET /lunches/?day=2025-11-14 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54356 - "OPTIONS /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:54362 - "GET /lunches/?day=2025-11-17 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52100 - "OPTIONS /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52112 - "GET /lunches/?day=2025-11-18 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52112 - "OPTIONS /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52100 - "GET /lunches/?day=2025-11-19 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52100 - "OPTIONS /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
+INFO:     127.0.0.1:52112 - "GET /lunches/?day=2025-11-20 HTTP/1.1" 200 OK
