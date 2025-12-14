@@ -1,0 +1,39 @@
+# General
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.swo
+*.swp
+
+# Environment variables
+.env
+.env.*
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+backend/uploads/
+backend/*.db
+edupage_lunch.db
+
+# Frontend
+frontend/node_modules/
+frontend/dist/
+frontend/npm-debug.log
+frontend/yarn-error.log
+frontend/.env.local
+
+# Nginx / Certbot config usually not committed if it has secrets, but structure is fine.
+# Ignoring the challenges directory
+certbot-challenges/
+
+# Project output / Storage
+uploads/
