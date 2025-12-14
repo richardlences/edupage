@@ -11,6 +11,8 @@ services:
       - postgres
     networks:
       - app-network
+    volumes:
+      - ./backend/oci_api_key.pem:/etc/oci/oci_api_key.pem:ro
 
   postgres:
     image: postgres:16

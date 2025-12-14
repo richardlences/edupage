@@ -23,6 +23,7 @@ htmlcov/
 backend/uploads/
 backend/*.db
 edupage_lunch.db
+backend/oci_api_key.pem
 
 # Frontend
 frontend/node_modules/
