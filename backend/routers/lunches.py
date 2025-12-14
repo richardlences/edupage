@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
-from ..models import User
-from ..database import SessionLocal
-from ..edupage_service import EdupageService
+from models import User
+from database import SessionLocal
+from edupage_service import EdupageService
 from datetime import date, datetime
 
 router = APIRouter(prefix="/lunches", tags=["lunches"])
@@ -23,7 +23,7 @@ def get_current_user(user_id: str = Header(None), db: Session = Depends(get_db))
     return user
 
 from sqlalchemy import func
-from ..models import Rating, Photo
+from models import Rating, Photo
 
 @router.get("/")
 def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Session = Depends(get_db)):

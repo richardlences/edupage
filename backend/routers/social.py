@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException, Header, UploadFile, File, Form
 from sqlalchemy.orm import Session
-from ..models import User, Rating, Photo
-from ..database import SessionLocal
+from models import User, Rating, Photo
+from database import SessionLocal
 from pydantic import BaseModel
 import shutil
 import os

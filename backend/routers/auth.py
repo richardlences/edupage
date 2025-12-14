@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from ..models import User
-from ..database import SessionLocal
-from ..edupage_service import EdupageService
+from models import User
+from database import SessionLocal
+from edupage_service import EdupageService
 from pydantic import BaseModel
 
 router = APIRouter(prefix="/auth", tags=["auth"])
