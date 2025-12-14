@@ -539,7 +539,7 @@ const deletePhoto = async (mealName: string) => {
   if (!confirm('Are you sure you want to remove your photo?')) return;
   
   try {
-    await axios.post('http://localhost:8000/social/delete_photo', {
+    await axios.post('/api/social/delete_photo', {
       meal_identifier: mealName
     }, {
       headers: { 'user-id': authStore.user?.id }
@@ -623,7 +623,7 @@ const fetchLunches = async () => {
   error.value = '';
   const dateStr = currentDate.value.toISOString().split('T')[0];
   try {
-    const response = await axios.get(`http://localhost:8000/lunches/?day=${dateStr}`, {
+    const response = await axios.get(`/api/lunches/?day=${dateStr}`, {
       headers: { 'user-id': authStore.user?.id }
     });
     lunches.value = response.data;
@@ -653,7 +653,7 @@ const changeDay = (days: number) => {
 const orderLunch = async (index: number) => {
   const dateStr = currentDate.value.toISOString().split('T')[0];
   try {
-    await axios.post(`http://localhost:8000/lunches/order?meal_index=${index}&day=${dateStr}`, {}, {
+    await axios.post(`/api/lunches/order?meal_index=${index}&day=${dateStr}`, {}, {
       headers: { 'user-id': authStore.user?.id }
     });
     await fetchLunches();
@@ -665,7 +665,7 @@ const orderLunch = async (index: number) => {
 const cancelLunch = async (index: number) => {
   const dateStr = currentDate.value.toISOString().split('T')[0];
   try {
-    await axios.post(`http://localhost:8000/lunches/cancel?meal_index=${index}&day=${dateStr}`, {}, {
+    await axios.post(`/api/lunches/cancel?meal_index=${index}&day=${dateStr}`, {}, {
       headers: { 'user-id': authStore.user?.id }
     });
     await fetchLunches();
@@ -676,7 +676,7 @@ const cancelLunch = async (index: number) => {
 
 const rateLunch = async (mealName: string, stars: number) => {
   try {
-    await axios.post('http://localhost:8000/social/rate', {
+    await axios.post('/api/social/rate', {
       meal_identifier: mealName,
       stars: stars
     }, {
@@ -697,7 +697,7 @@ const handleFileUpload = async (event: Event, mealName: string) => {
     formData.append('meal_identifier', mealName);
     
     try {
-      await axios.post('http://localhost:8000/social/upload', formData, {
+      await axios.post('/api/social/upload', formData, {
         headers: { 
             'user-id': authStore.user?.id,
             'Content-Type': 'multipart/form-data'

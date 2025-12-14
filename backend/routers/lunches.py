@@ -71,12 +71,15 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
             # Get average rating from OUR database only (not edupage ratings)
             avg_rating = db.query(func.avg(Rating.stars)).filter(Rating.meal_identifier == meal_name).scalar()
             
+            from storage import get_storage_service
+            
             # Get all photos
             photos = db.query(Photo).filter(Photo.meal_identifier == meal_name).all()
             photo_list = []
             user_has_photo = False
+            storage = get_storage_service()
             for p in photos:
-                photo_list.append(f"http://localhost:8000/{p.photo_path}")
+                photo_list.append(storage.get_url(p.photo_path))
                 if p.user_id == user.id:
                     user_has_photo = True
             

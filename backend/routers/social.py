@@ -6,6 +6,7 @@ from pydantic import BaseModel
 import shutil
 import os
 import uuid
+from storage import get_storage_service
 
 router = APIRouter(prefix="/social", tags=["social"])
 
@@ -43,13 +44,15 @@ def rate_lunch(request: RateRequest, user: User = Depends(get_current_user), db:
 
 @router.post("/upload")
 def upload_photo(meal_identifier: str = Form(...), file: UploadFile = File(...), user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    storage = get_storage_service()
+    
     # Check if user already has a photo for this meal
     existing_photo = db.query(Photo).filter(Photo.user_id == user.id, Photo.meal_identifier == meal_identifier).first()
     
     if existing_photo:
         # Remove old file
-        if os.path.exists(existing_photo.photo_path):
-            os.remove(existing_photo.photo_path)
+        storage.delete(existing_photo.photo_path)
+            
         db.delete(existing_photo)
         db.commit()
     else:
@@ -59,18 +62,14 @@ def upload_photo(meal_identifier: str = Form(...), file: UploadFile = File(...),
             raise HTTPException(status_code=400, detail="Max 5 photos per meal reached")
 
     # Save file
-    os.makedirs("uploads", exist_ok=True)
     filename = f"{uuid.uuid4()}_{file.filename}"
-    filepath = os.path.join("uploads", filename)
-    
-    with open(filepath, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
+    saved_path = storage.save(file.file, filename)
         
-    photo = Photo(user_id=user.id, meal_identifier=meal_identifier, photo_path=filepath)
+    photo = Photo(user_id=user.id, meal_identifier=meal_identifier, photo_path=saved_path)
     db.add(photo)
     db.commit()
     
-    return {"message": "Uploaded", "path": filepath}
+    return {"message": "Uploaded", "path": saved_path}
 
 class DeletePhotoRequest(BaseModel):
     meal_identifier: str
@@ -81,8 +80,8 @@ def delete_photo(request: DeletePhotoRequest, user: User = Depends(get_current_u
     if not photo:
         raise HTTPException(status_code=404, detail="Photo not found")
     
-    if os.path.exists(photo.photo_path):
-        os.remove(photo.photo_path)
+    storage = get_storage_service()
+    storage.delete(photo.photo_path)
         
     db.delete(photo)
     db.commit()
