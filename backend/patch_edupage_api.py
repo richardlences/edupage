@@ -7,7 +7,7 @@ This fixes the TypeError: cannot unpack non-iterable NoneType object
 import os
 
 # Path to the lunches.py file in the venv
-lunches_file = "backend/venv/lib/python3.13/site-packages/edupage_api/lunches.py"
+lunches_file = "/usr/local/lib/python3.12/site-packages/edupage_api/lunches.py"
 
 print(f"Patching {lunches_file}...")
 
