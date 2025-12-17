@@ -1,0 +1,31 @@
+# Git
+.git
+.gitignore
+
+# Python / Backend
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
+.pytest_cache/
+.coverage
+htmlcov/
+backend/uploads/
+backend/*.db
+edupage_lunch.db
+
+# Secrets
+.env
+.env.*
+backend/oci_api_key.pem
+
+# Frontend (if building in docker context context is root)
+frontend/node_modules/
+frontend/dist/
+frontend/npm-debug.log
+frontend/yarn-error.log
+
+# Certbot / Nginx
+certbot-challenges/

@@ -1,0 +1,75 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata (tags, labels) for Backend
+        id: meta-backend
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-backend
+
+      - name: Build and push Backend image
+        uses: docker/build-push-action@v5
+        with:
+          context: ./backend
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }}
+          labels: ${{ steps.meta-backend.outputs.labels }}
+
+      - name: Extract metadata (tags, labels) for Nginx
+        id: meta-nginx
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-nginx
+
+      - name: Build and push Nginx image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./nginx/Dockerfile
+          push: true
+          tags: ${{ steps.meta-backend.outputs.tags }} # Use same tags for sync
+          labels: ${{ steps.meta-backend.outputs.labels }}
+          # Note: Nginx Dockerfile context is root '.' because it copies 'frontend/' and 'nginx/'
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: success()
+    steps:
+      - name: Deployment Instructions
+        run: |
+          echo "To deploy to your server, you can allow this job to SSH into your server."
+          echo "For now, on your server, run:"
+          echo "  docker-compose pull"
+          echo "  docker-compose up -d"
+          echo "Make sure your docker-compose.yml on the server uses the ghcr.io images:"
+          echo "  image: ghcr.io/<owner>/edupage-backend:master"
+          echo "  image: ghcr.io/<owner>/edupage-nginx:master"
