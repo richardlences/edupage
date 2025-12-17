@@ -3,6 +3,7 @@ import shutil
 import uuid
 import abc
 from typing import Optional
+import mimetypes
 
 class StorageService(abc.ABC):
     @abc.abstractmethod
@@ -109,7 +110,8 @@ class OCIStorage(StorageService):
             self.namespace,
             self.bucket_name,
             filename,
-            content
+            content,
+            content_type=mimetypes.guess_type(filename)[0]
         )
         return filename
 
