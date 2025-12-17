@@ -590,7 +590,7 @@ const canRateMeal = (lunch: any) => {
     lunchDate.setHours(0, 0, 0, 0);
     
     // Can only rate if date is in the past and the meal was ordered
-    return lunchDate < today && lunch.is_ordered;
+    return ((lunchDate === today && new Date().getHours() >= 11) || (lunchDate < today)) && lunch.is_ordered;
 };
 
 // Check if a lunch can still be modified (ordered/canceled/changed)
@@ -603,6 +603,10 @@ const canModifyLunch = (lunch: any) => {
     const now = new Date();
     
     // Can modify if we're before the deadline
+    if (!orderedLunch.value) {
+      deadline.setDate(deadline.getDate() - 1);
+      deadline.setHours(14, 0, 0, 0);
+    }
     return now < deadline;
 };
 
@@ -663,6 +667,12 @@ const orderLunch = async (index: number) => {
 };
 
 const cancelLunch = async (index: number) => {
+  const deadline = new Date(currentDate.value);
+  deadline.setDate(deadline.getDate() - 1);
+  deadline.setHours(14, 0, 0, 0);
+  if (new Date() > deadline) {
+    if (!confirm("Are you sure you want to cancel your lunch? You can't reorder if you cancel now.")) return;
+  }
   const dateStr = currentDate.value.toISOString().split('T')[0];
   try {
     await api.post(`/api/lunches/cancel?meal_index=${index}&day=${dateStr}`, {}, {
