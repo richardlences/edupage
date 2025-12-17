@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import api from '@/api'
 import { ref } from 'vue'
 import router from '@/router'
 
@@ -16,7 +16,7 @@ export const useAuthStore = defineStore('auth', () => {
 
     async function login(username: string, password: string, subdomain: string) {
         try {
-            const response = await axios.post('/api/auth/login', {
+            const response = await api.post('/api/auth/login', {
                 username,
                 password,
                 subdomain

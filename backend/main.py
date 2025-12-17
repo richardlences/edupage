@@ -3,6 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import engine, Base
 from models import User, Rating, Photo # Ensure models are registered
 import os
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = FastAPI()
 
