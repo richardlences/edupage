@@ -1,5 +1,12 @@
 <template>
-  <v-app class="bg-grey-lighten-5">
+  <v-app :class="isDark ? 'bg-background' : 'bg-grey-lighten-5'">
+    <!-- Theme Toggle -->
+    <div class="position-absolute" style="top: 16px; right: 16px;">
+      <v-btn icon variant="text" @click="toggleTheme">
+        <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
+      </v-btn>
+    </div>
+
     <v-container class="fill-height" fluid>
       <v-row align="center" justify="center">
         <v-col cols="12" sm="8" md="5" lg="4">
@@ -9,36 +16,22 @@
             <v-avatar color="deep-orange" size="80" class="elevation-4 mb-4">
               <v-icon color="white" size="40">mdi-food-fork-drink</v-icon>
             </v-avatar>
-            <h1 class="text-h4 font-weight-black text-grey-darken-3">EduLunch</h1>
-            <p class="text-subtitle-1 text-grey-darken-1">Premium School Dining Experience</p>
+            <h1 class="text-h4 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">EduLunch</h1>
+            <p class="text-subtitle-1" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">Premium School Dining Experience</p>
           </div>
 
           <v-card class="rounded-xl elevation-8" border>
             <v-card-text class="pa-8">
-              <h2 class="text-h5 font-weight-bold text-center mb-6 text-grey-darken-3">Welcome Back</h2>
+              <h2 class="text-h5 font-weight-bold text-center mb-6" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">Welcome Back</h2>
               
               <v-form @submit.prevent="handleLogin">
-                <v-text-field
-                  label="Subdomain"
-                  v-model="subdomain"
-                  prepend-inner-icon="mdi-domain"
-                  variant="outlined"
-                  color="deep-orange"
-                  bg-color="grey-lighten-5"
-                  type="text"
-                  required
-                  hint="e.g. '1sg' for 1sg.edupage.org"
-                  persistent-hint
-                  class="mb-4"
-                ></v-text-field>
-                
                 <v-text-field
                   label="Username"
                   v-model="username"
                   prepend-inner-icon="mdi-account"
                   variant="outlined"
                   color="deep-orange"
-                  bg-color="grey-lighten-5"
+                  :bg-color="isDark ? 'grey-darken-3' : 'grey-lighten-5'"
                   type="text"
                   required
                   class="mb-4"
@@ -50,7 +43,7 @@
                   prepend-inner-icon="mdi-lock"
                   variant="outlined"
                   color="deep-orange"
-                  bg-color="grey-lighten-5"
+                  :bg-color="isDark ? 'grey-darken-3' : 'grey-lighten-5'"
                   type="password"
                   required
                   class="mb-6"
@@ -92,14 +85,22 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
+import { useTheme } from 'vuetify'
 
 const authStore = useAuthStore()
 const router = useRouter()
+const theme = useTheme()
 
-const subdomain = ref('')
+// Theme Logic
+const isDark = computed(() => theme.global.name.value === 'dark')
+const toggleTheme = () => {
+    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark'
+    localStorage.setItem('theme', theme.global.name.value)
+}
+
 const username = ref('')
 const password = ref('')
 const error = ref('')
@@ -109,7 +110,7 @@ const handleLogin = async () => {
   loading.value = true
   error.value = ''
   try {
-    const success = await authStore.login(username.value, password.value, subdomain.value)
+    const success = await authStore.login(username.value, password.value, '1sg')
     if (success) {
       router.push('/')
     } else {
@@ -121,6 +122,14 @@ const handleLogin = async () => {
     loading.value = false
   }
 }
+
+onMounted(() => {
+  // Load saved theme
+  const savedTheme = localStorage.getItem('theme')
+  if (savedTheme) {
+    theme.global.name.value = savedTheme
+  }
+})
 </script>
 
 <style scoped>
