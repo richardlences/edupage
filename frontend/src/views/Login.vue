@@ -22,7 +22,10 @@
 
           <v-card class="rounded-xl elevation-8" border>
             <v-card-text class="pa-8">
-              <h2 class="text-h5 font-weight-bold text-center mb-6" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">Welcome Back</h2>
+              <h2 class="text-h5 font-weight-bold text-center mb-1" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">Welcome Back</h2>
+              <p class="text-center text-caption mb-6" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">
+                Please use your official <strong>Edupage</strong> credentials
+              </p>
               
               <v-form @submit.prevent="handleLogin">
                 <v-text-field

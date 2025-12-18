@@ -11,4 +11,22 @@ const api = axios.create({
     },
 });
 
+// Response interceptor for handling 401 (session expired)
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error.response && error.response.status === 401) {
+            // Session expired or user not authenticated
+            // Clear localStorage and redirect to login
+            localStorage.removeItem('user');
+
+            // Only redirect if not already on login page
+            if (window.location.pathname !== '/login') {
+                window.location.href = '/login';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export default api;

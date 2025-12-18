@@ -6,3 +6,4 @@ python-multipart
 oci
 psycopg2-binary
 python-dotenv
+apscheduler

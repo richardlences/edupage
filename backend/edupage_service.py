@@ -1,8 +1,20 @@
 import json
 import pickle
 import base64
+from datetime import date
 from edupage_api import Edupage
-from edupage_api.exceptions import BadCredentialsException
+from edupage_api.exceptions import (
+    BadCredentialsException,
+    NotLoggedInException,
+    ExpiredSessionException as EdupageExpiredSessionException,
+    InvalidMealsData
+)
+
+
+class SessionExpiredException(Exception):
+    """Raised when the Edupage session has expired and needs re-authentication."""
+    pass
+
 
 class EdupageService:
     def __init__(self):
@@ -14,6 +26,7 @@ class EdupageService:
             return True
         except BadCredentialsException:
             return False
+
 
     def get_session_data(self):
         if self.edupage.is_logged_in:
@@ -53,35 +66,66 @@ class EdupageService:
                 # Reset login state if needed, though default is not logged in
                 self.edupage.is_logged_in = False
 
-    def get_lunches(self, date):
-        # date is datetime.date
-        # edupage-api might expect a specific format or object
-        # Looking at examples, it might be get_meals()
-        # We'll need to verify the method name.
-        # For now, let's assume get_meals() exists or similar.
-        # If not, we'll have to fix it.
+    def get_lunches(self, target_date):
+        """
+        Get meals for a specific date.
+        Raises SessionExpiredException if session is invalid.
+        """
         try:
-            return self.edupage.get_meals(date)
+            return self.edupage.get_meals(target_date)
+        except (NotLoggedInException, EdupageExpiredSessionException, InvalidMealsData) as e:
+            raise SessionExpiredException(f"Session expired: {e}")
+        except IndexError as e:
+            # This happens when edupage returns a login page instead of data
+            # The library tries to parse "edupageData:" but it's not there
+            raise SessionExpiredException(f"Session expired (parse error): {e}")
         except Exception as e:
             import traceback
             traceback.print_exc()
             print(f"Error fetching lunches: {e}")
+            # Re-raise as SessionExpiredException if it looks like an auth issue
+            error_str = str(e).lower()
+            if 'login' in error_str or 'auth' in error_str or 'session' in error_str:
+                raise SessionExpiredException(f"Session expired: {e}")
             return []
 
     def order_lunch(self, meal):
-        # meal object from get_lunches
+        """Order a meal. Raises SessionExpiredException if session is invalid."""
         try:
             self.edupage.assign_meal(meal)
             return True
+        except (NotLoggedInException, EdupageExpiredSessionException) as e:
+            raise SessionExpiredException(f"Session expired: {e}")
         except Exception as e:
             print(f"Error ordering lunch: {e}")
             return False
 
     def cancel_lunch(self, meal):
+        """Cancel a meal. Raises SessionExpiredException if session is invalid."""
         try:
             self.edupage.sign_out_meal(meal)
             return True
+        except (NotLoggedInException, EdupageExpiredSessionException) as e:
+            raise SessionExpiredException(f"Session expired: {e}")
         except Exception as e:
             print(f"Error canceling lunch: {e}")
             return False
 
+    def ping_session(self):
+        """
+        Check if the session is still valid by making a lightweight API call.
+        Raises SessionExpiredException if the session is expired.
+        """
+        try:
+            # Try to get today's meals as a simple validity check
+            self.edupage.get_meals(date.today())
+        except (NotLoggedInException, EdupageExpiredSessionException, InvalidMealsData) as e:
+            raise SessionExpiredException(f"Session expired: {e}")
+        except IndexError as e:
+            raise SessionExpiredException(f"Session expired (parse error): {e}")
+        except Exception as e:
+            error_str = str(e).lower()
+            if 'login' in error_str or 'auth' in error_str or 'session' in error_str:
+                raise SessionExpiredException(f"Session expired: {e}")
+            # For other errors (network, etc.), don't treat as expired
+            raise

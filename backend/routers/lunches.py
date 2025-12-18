@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
 from models import User
 from database import SessionLocal
-from edupage_service import EdupageService
+from edupage_service import EdupageService, SessionExpiredException
 from datetime import date, datetime
 
 router = APIRouter(prefix="/lunches", tags=["lunches"])
@@ -41,6 +41,11 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
     
     try:
         lunches = service.get_lunches(target_date)
+    except SessionExpiredException as e:
+        # Session expired - clear session data and return 401
+        user.edupage_session_data = None
+        db.commit()
+        raise HTTPException(status_code=401, detail="Session expired, please log in again")
     except Exception as e:
         print(f"Error fetching lunches: {e}")
         return []  # Return empty list if fetching fails
@@ -117,12 +122,18 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
     return results
 
 @router.post("/order")
-def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user)):
+def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     # We need to fetch lunches again to get the meal object
     target_date = datetime.strptime(day, "%Y-%m-%d").date()
     service = EdupageService()
     service.load_session_data(user.edupage_session_data)
-    lunches = service.get_lunches(target_date)
+    
+    try:
+        lunches = service.get_lunches(target_date)
+    except SessionExpiredException:
+        user.edupage_session_data = None
+        db.commit()
+        raise HTTPException(status_code=401, detail="Session expired, please log in again")
     
     if lunches and lunches.lunch:
         # We are ordering a specific menu item from the lunch
@@ -135,6 +146,10 @@ def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user
             # Let's assume service.edupage is compatible.
             lunches.lunch.choose(service.edupage, meal_index)
             return {"message": "Ordered"}
+        except SessionExpiredException:
+            user.edupage_session_data = None
+            db.commit()
+            raise HTTPException(status_code=401, detail="Session expired, please log in again")
         except Exception as e:
             print(f"Order error: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to order: {str(e)}")
@@ -142,16 +157,26 @@ def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user
         raise HTTPException(status_code=404, detail="No lunch found for this day")
 
 @router.post("/cancel")
-def cancel_lunch(meal_index: int, day: str, user: User = Depends(get_current_user)):
+def cancel_lunch(meal_index: int, day: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     target_date = datetime.strptime(day, "%Y-%m-%d").date()
     service = EdupageService()
     service.load_session_data(user.edupage_session_data)
-    lunches = service.get_lunches(target_date)
+    
+    try:
+        lunches = service.get_lunches(target_date)
+    except SessionExpiredException:
+        user.edupage_session_data = None
+        db.commit()
+        raise HTTPException(status_code=401, detail="Session expired, please log in again")
     
     if lunches and lunches.lunch:
         try:
             lunches.lunch.sign_off(service.edupage)
             return {"message": "Canceled"}
+        except SessionExpiredException:
+            user.edupage_session_data = None
+            db.commit()
+            raise HTTPException(status_code=401, detail="Session expired, please log in again")
         except Exception as e:
             print(f"Cancel error: {e}")
             raise HTTPException(status_code=500, detail=f"Failed to cancel: {str(e)}")
