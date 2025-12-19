@@ -50,16 +50,16 @@
     </v-app-bar>
 
     <v-main>
-      <v-container class="py-8" style="max-width: 1000px;">
+      <v-container class="py-4" style="max-width: 1000px;">
         
         <!-- Date Navigation - Floating Card Style -->
-        <v-card class="mb-8 rounded-xl mx-auto" elevation="4" max-width="600" border>
-          <div class="d-flex justify-space-between align-center pa-2">
+        <v-card class="mb-4 rounded-xl mx-auto" elevation="4" max-width="600" border>
+          <div class="d-flex justify-space-between align-center pa-1">
             <v-btn icon="mdi-chevron-left" variant="text" size="large" color="deep-orange" @click="changeDay(-1)"></v-btn>
             
             <div class="text-center py-2">
-              <div class="text-h5 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ formattedDate }}</div>
-              <div class="text-subtitle-1 text-uppercase text-deep-orange font-weight-bold letter-spacing-2">{{ dayName }}</div>
+              <div class="text-h6 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ formattedDate }}</div>
+              <div class="text-subtitle-2 text-uppercase text-deep-orange font-weight-bold letter-spacing-2">{{ dayName }}</div>
             </div>
             
             <v-btn icon="mdi-chevron-right" variant="text" size="large" color="deep-orange" @click="changeDay(1)"></v-btn>
@@ -69,42 +69,44 @@
         <!-- Ordered Meal Summary -->
         <v-card
           v-if="orderedLunch"
-          class="mb-6 rounded-xl border-success-glow"
+          class="mb-4 rounded-xl border-success-glow"
           elevation="4"
           :color="isDark ? 'green-darken-4' : 'green-lighten-5'"
         >
-          <div class="d-flex align-center justify-space-between pa-4">
-            <div class="d-flex align-center">
-              <v-avatar color="success" size="40" class="mr-4 elevation-2">
-                <v-icon color="white">mdi-check</v-icon>
+          <div class="d-flex align-center justify-start pa-2" style="gap: 8px;">
+            <div class="d-flex align-center flex-grow-1" style="min-width: 0;">
+              <v-avatar color="success" size="32" class="mr-2 elevation-2 flex-shrink-0">
+                <v-icon color="white" size="18">mdi-check</v-icon>
               </v-avatar>
-              <div>
-                <div class="text-caption font-weight-bold mb-0" :class="isDark ? 'text-green-lighten-2' : 'text-green-darken-3'">YOU HAVE ORDERED</div>
-                <div class="text-subtitle-1 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'" style="line-height: 1.2;">
+              <div style="min-width: 0;">
+                <div class="text-caption font-weight-bold mb-0" style="font-size: 0.65rem !important; line-height: 1;" :class="isDark ? 'text-green-lighten-2' : 'text-green-darken-3'">YOU HAVE ORDERED</div>
+                <div class="text-subtitle-1 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'" style="line-height: 1.2; white-space: normal;">
                   {{ orderedLunch.name }}
                 </div>
               </div>
             </div>
             
-            <v-btn
-              v-if="canModifyLunch(orderedLunch)"
-              color="error"
-              variant="text"
-              class="font-weight-bold"
-              prepend-icon="mdi-close-circle"
-              @click="cancelLunch(orderedLunch.index)"
-            >
-              Cancel
-            </v-btn>
-            <v-chip
-              v-else
-              color="success"
-              variant="tonal"
-              class="font-weight-bold"
-              prepend-icon="mdi-check-circle"
-            >
-              Confirmed
-            </v-chip>
+            <div class="flex-shrink-0">
+              <v-btn
+                v-if="canModifyLunch(orderedLunch)"
+                color="error"
+                variant="text"
+                class="font-weight-bold"
+                prepend-icon="mdi-close-circle"
+                @click="cancelLunch(orderedLunch.index)"
+              >
+                Cancel
+              </v-btn>
+              <v-chip
+                v-else
+                color="success"
+                variant="tonal"
+                class="font-weight-bold"
+                prepend-icon="mdi-check-circle"
+              >
+                Confirmed
+              </v-chip>
+            </div>
           </div>
         </v-card>
 
@@ -136,57 +138,30 @@
         </div>
 
         <!-- Lunches List -->
-        <div v-else class="d-flex flex-column gap-6">
+        <div v-else class="d-flex flex-column">
           
-          <!-- Soup Section -->
+          <!-- Soup Section - Ultra Compact -->
           <v-card 
             v-if="soup" 
-            class="rounded-xl overflow-hidden mb-6" 
-            elevation="3"
+            class="rounded-xl mb-4 overflow-hidden" 
+            elevation="2"
             border
+            :color="isDark ? 'brown-darken-4' : 'orange-lighten-5'"
           >
-            <div class="d-flex flex-column flex-md-row">
-              <!-- Soup Image Area -->
-              <div class="position-relative d-flex align-center justify-center" :class="isDark ? 'bg-grey-darken-4' : 'bg-grey-lighten-4'" style="width: 100%; max-width: 180px; min-height: 140px;">
-                <!-- Static Placeholder for Soup -->
-                <div class="d-flex flex-column align-center justify-center h-100 w-100" :class="isDark ? 'text-grey-darken-1' : 'text-grey-lighten-1'">
-                  <v-icon size="48" class="mb-2" :class="isDark ? 'text-grey-darken-1' : 'text-grey-lighten-1'">mdi-noodles</v-icon>
-                  <span class="text-caption font-weight-bold text-uppercase">Soup of the Day</span>
-                </div>
-              </div>
-
-              <!-- Soup Content -->
-              <div class="flex-grow-1 pa-4 d-flex flex-column justify-space-between" :class="isDark ? 'bg-brown-darken-4' : 'bg-orange-lighten-5'">
-                <div>
-                  <div class="d-flex justify-space-between align-start mb-3">
-                    <v-chip color="deep-orange" variant="flat" size="small" class="font-weight-bold text-uppercase px-3">
-                      Included
-                    </v-chip>
-                    <div class="d-flex align-center">
-                      <v-icon color="amber-darken-2" size="small" class="mr-1">mdi-star</v-icon>
-                      <span class="text-h6 font-weight-bold" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ soup.avg_rating || '--' }}</span>
-                      <span class="text-caption ml-1 font-weight-medium" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'" v-if="soup.avg_rating">/ 5</span>
-                    </div>
-                  </div>
-                  <div class="text-h5 font-weight-bold mb-2" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'" style="line-height: 1.2;">
-                    {{ soup.name }}
-                  </div>
-                </div>
-
-                <div class="d-flex align-center justify-space-between mt-4 pt-4 border-t" :class="isDark ? 'border-orange-darken-3' : 'border-orange-lighten-4'">
-                  <div class="d-flex flex-column">
-                    <!-- Rating removed for soup as per new design spec -->
-                  </div>
-                  <div></div> <!-- Spacer -->
-                  <v-icon color="orange-lighten-3" size="40">mdi-spoon-sugar</v-icon>
+            <div class="px-4 py-2 d-flex align-center">
+              <v-icon color="deep-orange" class="mr-3" size="small">mdi-bowl-mix</v-icon>
+              <div class="d-flex flex-column">
+                <span class="text-caption font-weight-bold text-deep-orange text-uppercase" style="line-height: 1; font-size: 0.65rem !important;">Soup of the Day</span>
+                <div class="text-subtitle-1 font-weight-bold mt-0" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">
+                  {{ soup.name }}
                 </div>
               </div>
             </div>
           </v-card>
 
           <!-- Main Meals Grid -->
-          <v-row>
-            <v-col cols="12" v-for="lunch in mainMeals" :key="lunch.index">
+          <v-row class="ma-0">
+            <v-col cols="12" v-for="lunch in mainMeals" :key="lunch.index" class="pa-0 mb-4">
               <v-card 
                 class="rounded-xl overflow-hidden transition-swing" 
                 :elevation="lunch.is_ordered ? 8 : 2"
@@ -195,19 +170,22 @@
               >
                 <div class="d-flex flex-column flex-md-row">
                   
-                  <!-- Meal Image Area -->
-                  <div class="position-relative d-flex align-center justify-center" :class="isDark ? 'bg-grey-darken-4' : 'bg-grey-lighten-4'" style="width: 100%; max-width: 220px; min-height: 160px;">
-                    
+                  <!-- Meal Image Area (Only if photos exist) -->
+                  <div 
+                    v-if="lunch.photos && lunch.photos.length > 0" 
+                    class="position-relative d-flex align-center justify-center shrink-0" 
+                    :class="isDark ? 'bg-grey-darken-4' : 'bg-grey-lighten-4'" 
+                    style="width: 100%; max-width: 220px; min-height: 160px;"
+                  >
                     <!-- Ordered Badge -->
-                    <div v-if="lunch.is_ordered" class="position-absolute z-index-10" style="top: 12px; left: 12px;">
-                      <v-chip color="success" variant="flat" class="font-weight-bold elevation-2" prepend-icon="mdi-check-circle">
+                    <div v-if="lunch.is_ordered" class="position-absolute z-index-10" style="top: 8px; left: 8px;">
+                      <v-chip color="success" variant="flat" size="small" class="font-weight-bold elevation-2" prepend-icon="mdi-check-circle">
                         ORDERED
                       </v-chip>
                     </div>
 
                     <!-- Image Carousel -->
                     <v-carousel
-                      v-if="lunch.photos && lunch.photos.length > 0"
                       height="100%"
                       hide-delimiter-background
                       show-arrows="hover"
@@ -224,26 +202,11 @@
                       ></v-carousel-item>
                     </v-carousel>
                     
-                    <!-- No Image Placeholder (Clickable if can rate) -->
-                    <div 
-                      v-else 
-                      class="d-flex flex-column align-center justify-center h-100 w-100 text-grey-lighten-1 transition-swing"
-                      :class="{'cursor-pointer hover-bg-grey-lighten-3': canRateMeal(lunch)}"
-                      @click="canRateMeal(lunch) ? triggerFileInput(lunch.index) : null"
-                    >
-                      <v-icon size="48" class="mb-2" :color="canRateMeal(lunch) ? 'deep-orange-lighten-2' : 'grey-lighten-1'">
-                        {{ canRateMeal(lunch) ? 'mdi-camera-plus' : 'mdi-food-off' }}
-                      </v-icon>
-                      <span class="text-caption font-weight-bold text-uppercase">
-                        {{ canRateMeal(lunch) ? 'Add Photo' : 'No Photo' }}
-                      </span>
-                    </div>
-
                     <!-- Photo Management Button (Top Right) -->
                     <div 
                       v-if="canRateMeal(lunch)"
                       class="position-absolute"
-                      style="top: 12px; right: 12px; z-index: 5;"
+                      style="top: 8px; right: 8px; z-index: 5;"
                     >
                       <!-- If user has photo: Menu with Change/Remove -->
                       <v-menu v-if="lunch.user_has_photo" location="bottom end">
@@ -251,12 +214,12 @@
                           <v-btn
                             v-bind="props"
                             icon
-                            size="small"
+                            size="x-small"
                             color="white"
                             class="text-deep-orange"
                             elevation="2"
                           >
-                            <v-icon>mdi-cog</v-icon>
+                            <v-icon size="small">mdi-cog</v-icon>
                           </v-btn>
                         </template>
                         <v-list density="compact" elevation="3" class="rounded-lg">
@@ -269,21 +232,19 @@
                         </v-list>
                       </v-menu>
 
-                      <!-- If user has NO photo but photos exist (limit check): Simple Add Button -->
+                      <!-- If user has NO photo but photos exist: Simple Add Button -->
                       <v-btn
-                        v-else-if="lunch.photos && lunch.photos.length > 0 && lunch.photos.length < 5"
+                        v-else-if="lunch.photos.length < 5"
                         icon
-                        size="small"
+                        size="x-small"
                         color="white"
                         class="text-deep-orange"
                         elevation="2"
                         @click="triggerFileInput(lunch.index)"
                       >
-                        <v-icon>mdi-camera-plus</v-icon>
-                        <v-tooltip activator="parent" location="bottom">Add Photo</v-tooltip>
+                        <v-icon size="small">mdi-camera-plus</v-icon>
                       </v-btn>
 
-                      <!-- Hidden Input -->
                       <input 
                         type="file" 
                         :ref="(el) => setFileInputRef(el, lunch.index)"
@@ -296,42 +257,84 @@
 
                   <!-- Meal Content -->
                   <div 
-                    class="flex-grow-1 pa-4 d-flex flex-column justify-space-between"
+                    class="flex-grow-1 pa-3 d-flex flex-column justify-space-between"
                     :class="lunch.is_ordered ? (isDark ? 'bg-green-darken-4' : 'bg-green-lighten-5') : (isDark ? 'bg-surface' : 'bg-white')"
                   >
                     <div>
-                      <div class="d-flex justify-space-between align-start mb-3">
-                        <v-avatar 
-                          :color="lunch.is_ordered ? 'success' : 'grey-lighten-3'" 
-                          size="36" 
-                          class="elevation-1"
-                        >
-                          <span 
-                            class="font-weight-black text-body-1"
-                            :class="lunch.is_ordered ? 'text-white' : 'text-grey-darken-2'"
+                      <div class="d-flex justify-space-between align-start mb-1">
+                        <div class="d-flex align-center">
+                          <v-avatar 
+                            :color="lunch.is_ordered ? 'success' : 'grey-lighten-3'" 
+                            size="32" 
+                            class="elevation-1 mr-2"
                           >
-                            {{ lunch.number || lunch.index }}
-                          </span>
-                        </v-avatar>
+                            <span 
+                              class="font-weight-black text-body-2"
+                              :class="lunch.is_ordered ? 'text-white' : 'text-grey-darken-2'"
+                            >
+                              {{ lunch.number || lunch.index }}
+                            </span>
+                          </v-avatar>
+                          
+                          <!-- Dynamic Ordered Chip (Only if no photo) -->
+                          <v-chip 
+                            v-if="lunch.is_ordered && (!lunch.photos || lunch.photos.length === 0)"
+                            color="success" 
+                            variant="flat" 
+                            size="x-small"
+                            class="font-weight-bold px-2"
+                            prepend-icon="mdi-check-circle"
+                          >
+                            ORDERED
+                          </v-chip>
+                        </div>
                         
                         <div class="d-flex align-center">
-                          <v-icon color="amber-darken-2" size="small" class="mr-1">mdi-star</v-icon>
-                          <span class="text-h6 font-weight-bold" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ lunch.avg_rating || '--' }}</span>
-                          <span class="text-caption ml-1 font-weight-medium" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'" v-if="lunch.avg_rating">/ 5</span>
+                          <v-icon color="amber-darken-2" size="x-small" class="mr-1">mdi-star</v-icon>
+                          <span class="text-body-2 font-weight-bold" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ lunch.avg_rating || '--' }}</span>
+                          <span class="text-caption ml-1 font-weight-medium" style="font-size: 0.7rem !important;" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'" v-if="lunch.avg_rating">/ 5</span>
                         </div>
                       </div>
                       
-                      <div class="text-h5 font-weight-bold mb-2" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'" style="line-height: 1.2;">
+                      <div class="text-subtitle-1 font-weight-bold mb-1" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'" style="line-height: 1.2;">
                         {{ lunch.name }}
+                      </div>
+
+                      <!-- Compact Photo Upload (Only if no photo) -->
+                      <div v-if="!lunch.photos || lunch.photos.length === 0" class="mt-1">
+                        <div v-if="canRateMeal(lunch)" class="d-flex align-center">
+                           <v-btn
+                            variant="tonal"
+                            size="x-small"
+                            color="deep-orange"
+                            prepend-icon="mdi-camera-plus"
+                            class="font-weight-bold text-caption"
+                            @click="triggerFileInput(lunch.index)"
+                            style="height: 24px;"
+                          >
+                            Add Photo
+                          </v-btn>
+                          <input 
+                            type="file" 
+                            :ref="(el) => setFileInputRef(el, lunch.index)"
+                            class="d-none" 
+                            @change="(e) => handleFileUpload(e, lunch.name)"
+                            accept="image/*"
+                          >
+                        </div>
+                        <div v-else class="text-caption d-flex align-center" :class="isDark ? 'text-grey-lighten-1' : 'text-grey-darken-1'" style="font-size: 0.75rem !important;">
+                          <v-icon size="x-small" class="mr-1">mdi-camera-off</v-icon>
+                          No photos yet
+                        </div>
                       </div>
                     </div>
 
-                    <div class="d-flex align-center justify-space-between mt-4 pt-4 border-t" :class="lunch.is_ordered ? 'border-green-lighten-4' : 'border-grey-lighten-4'">
+                    <div class="d-flex align-center justify-space-between mt-2 pt-2 border-t" :class="lunch.is_ordered ? 'border-green-lighten-4' : 'border-grey-lighten-4'">
                       
                       <!-- Rating Area (Only show if user can rate) -->
                       <div class="d-flex flex-column" v-if="canRateMeal(lunch)">
-                        <span class="text-caption font-weight-medium mb-1" :class="lunch.is_ordered ? 'text-green-darken-2' : 'text-grey-darken-1'">
-                          RATE THIS MEAL
+                        <span class="text-caption font-weight-bold mb-0" style="font-size: 0.6rem !important;" :class="lunch.is_ordered ? 'text-green-darken-2' : 'text-grey-darken-1'">
+                          RATE MEAL
                         </span>
                         <v-rating
                           v-model="userRatings[lunch.name]"
@@ -341,7 +344,7 @@
                           hover
                           half-increments
                           @update:modelValue="(val) => rateLunch(lunch.name, Number(val))"
-                          size="small"
+                          size="32"
                         ></v-rating>
                       </div>
                       <div v-else></div> <!-- Spacer if no rating -->
@@ -690,6 +693,6 @@ onMounted(() => {
 }
 
 .gap-6 {
-  gap: 24px;
+  gap: 16px;
 }
 </style>
