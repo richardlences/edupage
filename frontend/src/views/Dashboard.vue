@@ -140,7 +140,7 @@
         </div>
 
         <!-- Lunches List -->
-        <div v-else class="d-flex flex-column">
+        <div v-else class="d-flex flex-column" :class="{'stale-data': isStale}">
           
           <!-- Soup Section - Ultra Compact -->
           <v-card 
@@ -465,6 +465,7 @@ const currentDate = ref(new Date());
 const lunches = ref<any[]>([]);
 const loading = ref(false);
 const refreshing = ref(false);
+const isStale = ref(false); // True when showing cached data while fetching fresh
 const actionLoading = ref<Record<string, boolean>>({});
 const error = ref('');
 const userRatings = ref<Record<string, number>>({});
@@ -472,6 +473,10 @@ const fileInputRefs = ref<Record<string, HTMLInputElement>>({});
 const lightboxOpen = ref(false);
 const lightboxPhotos = ref<string[]>([]);
 const lightboxIndex = ref(0);
+
+// Request cancellation and caching
+let fetchController: AbortController | null = null;
+const lunchCache = new Map<string, any[]>();
 
 const setFileInputRef = (el: any, key: string | number) => {
   if (el) {
@@ -579,23 +584,48 @@ const getModificationMessage = (lunch: any) => {
     return null;
 };
 
-const fetchLunches = async () => {
-  if (lunches.value && lunches.value.length > 0) {
+const fetchLunches = async (forceRefresh = false) => {
+  const dateStr = currentDate.value.toISOString().split('T')[0] as string;
+  
+  // Abort any in-flight request
+  if (fetchController) {
+    fetchController.abort();
+  }
+  fetchController = new AbortController();
+  
+  // Check cache first
+  const cached = lunchCache.get(dateStr);
+  if (cached && cached.length > 0) {
+    lunches.value = cached;
+    isStale.value = true; // Mark as stale while we refresh
     refreshing.value = true;
   } else {
     loading.value = true;
+    isStale.value = false;
   }
   
   error.value = '';
-  const dateStr = currentDate.value.toISOString().split('T')[0];
+  
   try {
     const response = await api.get(`/api/lunches/?day=${dateStr}`, {
-      headers: { 'user-id': authStore.user?.id }
+      headers: { 'user-id': String(authStore.user?.id) },
+      signal: fetchController.signal
     });
+    
+    // Update cache and state
+    lunchCache.set(dateStr, response.data);
     lunches.value = response.data;
-  } catch (e) {
+    isStale.value = false;
+  } catch (e: any) {
+    // Ignore aborted requests
+    if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') {
+      return;
+    }
     console.error(e);
-    error.value = 'Failed to load lunches.';
+    // Only show error if we don't have cached data to show
+    if (!cached || cached.length === 0) {
+      error.value = 'Failed to load lunches.';
+    }
   } finally {
     loading.value = false;
     refreshing.value = false;
@@ -614,6 +644,8 @@ const changeDay = (days: number) => {
   }
   
   currentDate.value = newDate;
+  
+  // Abort previous request and fetch new day (non-blocking)
   fetchLunches();
 };
 
@@ -742,5 +774,10 @@ onMounted(() => {
 
 .gap-6 {
   gap: 16px;
+}
+
+.stale-data {
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out;
 }
 </style>
