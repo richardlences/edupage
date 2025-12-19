@@ -4,6 +4,7 @@ from models import User
 from database import SessionLocal
 from edupage_service import EdupageService, SessionExpiredException
 from datetime import date, datetime
+from cache import lunch_cache
 
 router = APIRouter(prefix="/lunches", tags=["lunches"])
 
@@ -35,20 +36,32 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
             raise HTTPException(status_code=400, detail="Invalid date format")
     else:
         target_date = date.today()
-
-    service = EdupageService()
-    service.load_session_data(user.edupage_session_data)
     
-    try:
-        lunches = service.get_lunches(target_date)
-    except SessionExpiredException as e:
-        # Session expired - clear session data and return 401
-        user.edupage_session_data = None
-        db.commit()
-        raise HTTPException(status_code=401, detail="Session expired, please log in again")
-    except Exception as e:
-        print(f"Error fetching lunches: {e}")
-        return []  # Return empty list if fetching fails
+    date_str = target_date.isoformat()
+    
+    # Check cache first
+    cached_lunches = lunch_cache.get(user.id, date_str)
+    
+    if cached_lunches is None:
+        # Cache miss - fetch from Edupage
+        service = EdupageService()
+        service.load_session_data(user.edupage_session_data)
+        
+        try:
+            lunches = service.get_lunches(target_date)
+        except SessionExpiredException as e:
+            # Session expired - clear session data and return 401
+            user.edupage_session_data = None
+            db.commit()
+            raise HTTPException(status_code=401, detail="Session expired, please log in again")
+        except Exception as e:
+            print(f"Error fetching lunches: {e}")
+            return []  # Return empty list if fetching fails
+        
+        # Store raw edupage data in cache
+        lunch_cache.set(user.id, date_str, lunches)
+    else:
+        lunches = cached_lunches
     
     # Serialize and enrich
     results = []
@@ -75,6 +88,12 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
             
             # Get average rating from OUR database only (not edupage ratings)
             avg_rating = db.query(func.avg(Rating.stars)).filter(Rating.meal_identifier == meal_name).scalar()
+            
+            # Get user's own rating for this meal
+            user_rating = db.query(Rating.stars).filter(
+                Rating.user_id == user.id,
+                Rating.meal_identifier == meal_name
+            ).scalar()
             
             from storage import get_storage_service
             
@@ -112,6 +131,7 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
                 "number": menu.number,  # Add menu number (e.g. "1", "2", "3" or "None" for soup)
                 "is_ordered": is_ordered,
                 "avg_rating": round(avg_rating, 1) if avg_rating else None,  # Only our app's rating
+                "user_rating": user_rating,  # User's own rating for this meal
                 "photo_url": photo_url,
                 "photos": photo_list,
                 "user_has_photo": user_has_photo,
@@ -120,6 +140,7 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
             })
         
     return results
+
 
 @router.post("/order")
 def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
@@ -145,6 +166,8 @@ def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user
             # The Edupage class in edupage-api seems to be the main entry point.
             # Let's assume service.edupage is compatible.
             lunches.lunch.choose(service.edupage, meal_index)
+            # Invalidate cache so next fetch reflects the new order
+            lunch_cache.invalidate(user.id, day)
             return {"message": "Ordered"}
         except SessionExpiredException:
             user.edupage_session_data = None
@@ -172,6 +195,8 @@ def cancel_lunch(meal_index: int, day: str, user: User = Depends(get_current_use
     if lunches and lunches.lunch:
         try:
             lunches.lunch.sign_off(service.edupage)
+            # Invalidate cache so next fetch reflects the cancellation
+            lunch_cache.invalidate(user.id, day)
             return {"message": "Canceled"}
         except SessionExpiredException:
             user.edupage_session_data = None

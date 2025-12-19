@@ -477,6 +477,7 @@ const lightboxIndex = ref(0);
 // Request cancellation and caching
 let fetchController: AbortController | null = null;
 const lunchCache = new Map<string, any[]>();
+const lastRequestId = ref(0);
 
 const setFileInputRef = (el: any, key: string | number) => {
   if (el) {
@@ -584,8 +585,17 @@ const getModificationMessage = (lunch: any) => {
     return null;
 };
 
+const syncUserRatings = (lunchesList: any[]) => {
+  for (const lunch of lunchesList) {
+    if (lunch.user_rating !== null && lunch.user_rating !== undefined) {
+      userRatings.value[lunch.name] = lunch.user_rating;
+    }
+  }
+};
+
 const fetchLunches = async (forceRefresh = false) => {
   const dateStr = currentDate.value.toISOString().split('T')[0] as string;
+  const requestId = ++lastRequestId.value;
   
   // Abort any in-flight request
   if (fetchController) {
@@ -597,9 +607,11 @@ const fetchLunches = async (forceRefresh = false) => {
   const cached = lunchCache.get(dateStr);
   if (cached && cached.length > 0) {
     lunches.value = cached;
+    syncUserRatings(cached);
     isStale.value = true; // Mark as stale while we refresh
     refreshing.value = true;
   } else {
+    lunches.value = []; // Clear previous data on cache miss so the loading spinner shows
     loading.value = true;
     isStale.value = false;
   }
@@ -612,23 +624,30 @@ const fetchLunches = async (forceRefresh = false) => {
       signal: fetchController.signal
     });
     
-    // Update cache and state
-    lunchCache.set(dateStr, response.data);
-    lunches.value = response.data;
-    isStale.value = false;
+    // Only update state if this is still the most recent request
+    if (requestId === lastRequestId.value) {
+      // Update cache and state
+      lunchCache.set(dateStr, response.data);
+      lunches.value = response.data;
+      syncUserRatings(response.data);
+      isStale.value = false;
+    }
   } catch (e: any) {
     // Ignore aborted requests
     if (e.name === 'CanceledError' || e.code === 'ERR_CANCELED') {
       return;
     }
     console.error(e);
-    // Only show error if we don't have cached data to show
-    if (!cached || cached.length === 0) {
+    // Only show error if we don't have cached data to show and this is still current
+    if (requestId === lastRequestId.value && (!cached || cached.length === 0)) {
       error.value = 'Failed to load lunches.';
     }
   } finally {
-    loading.value = false;
-    refreshing.value = false;
+    // Only clear loading state if this is still the latest request
+    if (requestId === lastRequestId.value) {
+      loading.value = false;
+      refreshing.value = false;
+    }
   }
 };
 
