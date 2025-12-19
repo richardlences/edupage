@@ -449,6 +449,7 @@ import { useAuthStore } from '@/stores/auth';
 import api from '@/api';
 import { useRouter } from 'vue-router';
 import { useTheme } from 'vuetify';
+import imageCompression from 'browser-image-compression';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -727,12 +728,27 @@ const rateLunch = async (mealName: string, stars: number) => {
 const handleFileUpload = async (event: Event, mealName: string) => {
   const target = event.target as HTMLInputElement;
   if (target.files && target.files[0]) {
-    const formData = new FormData();
-    formData.append('file', target.files[0]);
-    formData.append('meal_identifier', mealName);
+    const originalFile = target.files[0];
     
     actionLoading.value[mealName] = true;
     try {
+      // Image compression options
+      const options = {
+        maxSizeMB: 1,
+        maxWidthOrHeight: 1920,
+        useWebWorker: true,
+        fileType: 'image/jpeg'
+      };
+
+      // Compress image
+      const compressedFile = await imageCompression(originalFile, options);
+      
+      const formData = new FormData();
+      // Ensure we have a filename, browser-image-compression might return a generic 'image.jpeg' if not specified
+      // But usually it keeps the name or we can provide one.
+      formData.append('file', compressedFile, originalFile.name.replace(/\.[^/.]+$/, "") + ".jpg");
+      formData.append('meal_identifier', mealName);
+      
       await api.post('/api/social/upload', formData, {
         headers: { 
             'user-id': authStore.user?.id,
@@ -749,6 +765,8 @@ const handleFileUpload = async (event: Event, mealName: string) => {
       console.error(e);
     } finally {
       actionLoading.value[mealName] = false;
+      // Reset the file input so the same file can be selected again
+      target.value = '';
     }
   }
 };
