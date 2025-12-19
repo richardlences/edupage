@@ -93,6 +93,8 @@
                 variant="text"
                 class="font-weight-bold"
                 prepend-icon="mdi-close-circle"
+                :loading="actionLoading['cancel-' + orderedLunch.index]"
+                :disabled="refreshing"
                 @click="cancelLunch(orderedLunch.index)"
               >
                 Cancel
@@ -110,8 +112,8 @@
           </div>
         </v-card>
 
-        <!-- Loading State -->
-        <div v-if="loading" class="d-flex flex-column align-center justify-center py-16">
+        <!-- Initial Loading State -->
+        <div v-if="loading && (!lunches || lunches.length === 0)" class="d-flex flex-column align-center justify-center py-16">
           <v-progress-circular indeterminate color="deep-orange" size="64" width="6"></v-progress-circular>
           <div class="mt-4 text-h6 font-weight-light" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">Preparing menu...</div>
         </div>
@@ -218,6 +220,8 @@
                             color="white"
                             class="text-deep-orange"
                             elevation="2"
+                            :loading="actionLoading[lunch.name]"
+                            :disabled="refreshing"
                           >
                             <v-icon size="small">mdi-cog</v-icon>
                           </v-btn>
@@ -240,6 +244,8 @@
                         color="white"
                         class="text-deep-orange"
                         elevation="2"
+                        :loading="actionLoading[lunch.name]"
+                        :disabled="refreshing"
                         @click="triggerFileInput(lunch.index)"
                       >
                         <v-icon size="small">mdi-camera-plus</v-icon>
@@ -309,6 +315,8 @@
                             color="deep-orange"
                             prepend-icon="mdi-camera-plus"
                             class="font-weight-bold text-caption"
+                            :loading="actionLoading[lunch.name]"
+                            :disabled="refreshing"
                             @click="triggerFileInput(lunch.index)"
                             style="height: 24px;"
                           >
@@ -343,6 +351,7 @@
                           density="compact"
                           hover
                           half-increments
+                          :disabled="refreshing || actionLoading[lunch.name]"
                           @update:modelValue="(val) => rateLunch(lunch.name, Number(val))"
                           size="32"
                         ></v-rating>
@@ -361,13 +370,14 @@
                         >
                           {{ getModificationMessage(lunch) }}
                         </v-chip>
-                        
-                        <!-- Cancel Button -->
+                                                <!-- Cancel Button -->
                         <v-btn
                           v-else-if="lunch.is_ordered"
                           color="error"
                           variant="flat"
                           prepend-icon="mdi-close-circle-outline"
+                          :loading="actionLoading['cancel-' + lunch.index]"
+                          :disabled="refreshing"
                           @click="cancelLunch(lunch.index)"
                           class="text-capitalize font-weight-bold"
                         >
@@ -381,6 +391,8 @@
                           variant="flat"
                           elevation="2"
                           prepend-icon="mdi-silverware-fork-knife"
+                          :loading="actionLoading['order-' + lunch.index]"
+                          :disabled="refreshing"
                           @click="orderLunch(lunch.index)"
                           class="text-capitalize font-weight-bold px-6"
                         >
@@ -394,6 +406,17 @@
             </v-col>
           </v-row>
         </div>
+
+        <!-- Global Refreshing Overlay (Subtle) -->
+        <v-overlay
+          :model-value="refreshing"
+          class="align-center justify-center"
+          persistent
+          scrim="black"
+          opacity="0.1"
+        >
+          <v-progress-circular indeterminate color="deep-orange" size="48"></v-progress-circular>
+        </v-overlay>
       </v-container>
     </v-main>
     <!-- Lightbox Dialog -->
@@ -441,6 +464,8 @@ const toggleTheme = () => {
 const currentDate = ref(new Date());
 const lunches = ref<any[]>([]);
 const loading = ref(false);
+const refreshing = ref(false);
+const actionLoading = ref<Record<string, boolean>>({});
 const error = ref('');
 const userRatings = ref<Record<string, number>>({});
 const fileInputRefs = ref<Record<string, HTMLInputElement>>({});
@@ -467,16 +492,19 @@ const openLightbox = (photos: string[], index: number) => {
 const deletePhoto = async (mealName: string) => {
   if (!confirm('Are you sure you want to remove your photo?')) return;
   
+  actionLoading.value[mealName] = true;
   try {
     await api.post('/api/social/delete_photo', {
       meal_identifier: mealName
     }, {
       headers: { 'user-id': authStore.user?.id }
     });
-    fetchLunches();
+    await fetchLunches();
   } catch (e) {
     alert('Failed to delete photo.');
     console.error(e);
+  } finally {
+    actionLoading.value[mealName] = false;
   }
 };
 
@@ -552,7 +580,12 @@ const getModificationMessage = (lunch: any) => {
 };
 
 const fetchLunches = async () => {
-  loading.value = true;
+  if (lunches.value && lunches.value.length > 0) {
+    refreshing.value = true;
+  } else {
+    loading.value = true;
+  }
+  
   error.value = '';
   const dateStr = currentDate.value.toISOString().split('T')[0];
   try {
@@ -565,6 +598,7 @@ const fetchLunches = async () => {
     error.value = 'Failed to load lunches.';
   } finally {
     loading.value = false;
+    refreshing.value = false;
   }
 };
 
@@ -585,6 +619,8 @@ const changeDay = (days: number) => {
 
 const orderLunch = async (index: number) => {
   const dateStr = currentDate.value.toISOString().split('T')[0];
+  const mealKey = `order-${index}`;
+  actionLoading.value[mealKey] = true;
   try {
     await api.post(`/api/lunches/order?meal_index=${index}&day=${dateStr}`, {}, {
       headers: { 'user-id': authStore.user?.id }
@@ -592,6 +628,8 @@ const orderLunch = async (index: number) => {
     await fetchLunches();
   } catch (e) {
     alert('Failed to order lunch.');
+  } finally {
+    actionLoading.value[mealKey] = false;
   }
 };
 
@@ -603,6 +641,8 @@ const cancelLunch = async (index: number) => {
     if (!confirm("Are you sure you want to cancel your lunch? You can't reorder if you cancel now.")) return;
   }
   const dateStr = currentDate.value.toISOString().split('T')[0];
+  const mealKey = `cancel-${index}`;
+  actionLoading.value[mealKey] = true;
   try {
     await api.post(`/api/lunches/cancel?meal_index=${index}&day=${dateStr}`, {}, {
       headers: { 'user-id': authStore.user?.id }
@@ -610,10 +650,13 @@ const cancelLunch = async (index: number) => {
     await fetchLunches();
   } catch (e) {
     alert('Failed to cancel lunch.');
+  } finally {
+    actionLoading.value[mealKey] = false;
   }
 };
 
 const rateLunch = async (mealName: string, stars: number) => {
+  actionLoading.value[mealName] = true;
   try {
     await api.post('/api/social/rate', {
       meal_identifier: mealName,
@@ -622,9 +665,11 @@ const rateLunch = async (mealName: string, stars: number) => {
       headers: { 'user-id': authStore.user?.id }
     });
     userRatings.value[mealName] = stars;
-    fetchLunches();
+    await fetchLunches();
   } catch (e) {
     console.error(e);
+  } finally {
+    actionLoading.value[mealName] = false;
   }
 };
 
@@ -635,6 +680,7 @@ const handleFileUpload = async (event: Event, mealName: string) => {
     formData.append('file', target.files[0]);
     formData.append('meal_identifier', mealName);
     
+    actionLoading.value[mealName] = true;
     try {
       await api.post('/api/social/upload', formData, {
         headers: { 
@@ -642,7 +688,7 @@ const handleFileUpload = async (event: Event, mealName: string) => {
             'Content-Type': 'multipart/form-data'
         }
       });
-      fetchLunches();
+      await fetchLunches();
     } catch (e: any) {
       if (e.response && e.response.status === 400) {
         alert(e.response.data.detail);
@@ -650,6 +696,8 @@ const handleFileUpload = async (event: Event, mealName: string) => {
         alert('Failed to upload photo.');
       }
       console.error(e);
+    } finally {
+      actionLoading.value[mealName] = false;
     }
   }
 };
