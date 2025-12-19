@@ -429,10 +429,10 @@ const router = useRouter();
 const theme = useTheme();
 
 // Theme Logic
-const isDark = computed(() => theme.global.name.value === 'dark');
+const isDark = computed(() => theme.current.value.dark);
 const toggleTheme = () => {
-    theme.global.name.value = theme.global.current.value.dark ? 'light' : 'dark';
-    localStorage.setItem('theme', theme.global.name.value);
+  theme.toggle();
+  localStorage.setItem('theme', theme.name.value);
 };
 
 const currentDate = ref(new Date());
@@ -660,7 +660,7 @@ onMounted(() => {
   // Load saved theme
   const savedTheme = localStorage.getItem('theme');
   if (savedTheme) {
-    theme.global.name.value = savedTheme;
+    theme.change(savedTheme);
   }
   
   fetchLunches();
