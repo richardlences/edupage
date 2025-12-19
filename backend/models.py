@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, DateTime, Text, Float
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import Base
@@ -19,7 +19,7 @@ class Rating(Base):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey("users.id"))
     meal_identifier = Column(String, index=True) # Some ID from edupage or date+meal_index
-    stars = Column(Integer)
+    stars = Column(Float)
     created_at = Column(DateTime, default=datetime.utcnow)
 
     user = relationship("User", back_populates="ratings")

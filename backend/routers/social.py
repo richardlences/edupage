@@ -27,7 +27,7 @@ def get_current_user(user_id: str = Header(None), db: Session = Depends(get_db))
 
 class RateRequest(BaseModel):
     meal_identifier: str
-    stars: int
+    stars: float
 
 @router.post("/rate")
 def rate_lunch(request: RateRequest, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
