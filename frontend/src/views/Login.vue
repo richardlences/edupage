@@ -38,6 +38,8 @@
                   type="text"
                   required
                   class="mb-4"
+                  name="username"
+                  autocomplete="username"
                 ></v-text-field>
                 
                 <v-text-field
@@ -50,6 +52,8 @@
                   type="password"
                   required
                   class="mb-6"
+                  name="password"
+                  autocomplete="current-password"
                 ></v-text-field>
 
                 <v-alert 
@@ -63,6 +67,7 @@
                 </v-alert>
 
                 <v-btn 
+                  type="submit"
                   color="deep-orange" 
                   size="large" 
                   block 
