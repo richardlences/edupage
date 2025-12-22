@@ -66,7 +66,8 @@
           </div>
         </v-card>
 
-        <!-- Ordered Meal Summary -->
+        <div class="position-relative">
+          <!-- Ordered Meal Summary -->
         <v-card
           v-if="orderedLunch"
           class="mb-4 rounded-xl border-success-glow"
@@ -175,9 +176,8 @@
                   <!-- Meal Image Area (Only if photos exist) -->
                   <div 
                     v-if="lunch.photos && lunch.photos.length > 0" 
-                    class="position-relative d-flex align-center justify-center shrink-0" 
+                    class="meal-image-container position-relative d-flex align-center justify-center shrink-0" 
                     :class="isDark ? 'bg-grey-darken-4' : 'bg-grey-lighten-4'" 
-                    style="width: 100%; max-width: 220px; min-height: 160px;"
                   >
                     <!-- Ordered Badge -->
                     <div v-if="lunch.is_ordered" class="position-absolute z-index-10" style="top: 8px; left: 8px;">
@@ -199,7 +199,7 @@
                         :key="i"
                         :src="photo"
                         cover
-                        @click="openLightbox(lunch.photos, i)"
+                        @click="openLightbox(lunch.photos, Number(i))"
                         style="cursor: zoom-in;"
                       ></v-carousel-item>
                     </v-carousel>
@@ -407,16 +407,19 @@
           </v-row>
         </div>
 
-        <!-- Global Refreshing Overlay (Subtle) -->
+        <!-- Scoped Refreshing Overlay (Covers everything below navigation) -->
         <v-overlay
           :model-value="refreshing"
           class="align-center justify-center"
+          contained
           persistent
-          scrim="black"
-          opacity="0.1"
+          :scrim="isDark ? 'black' : 'white'"
+          :opacity="isDark ? 0.3 : 0.5"
         >
           <v-progress-circular indeterminate color="deep-orange" size="48"></v-progress-circular>
         </v-overlay>
+        </div> <!-- End of position-relative wrapper -->
+
       </v-container>
     </v-main>
     <!-- Lightbox Dialog -->
@@ -790,6 +793,21 @@ onMounted(() => {
 <style scoped>
 .bg-black-transparent {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+.meal-image-container {
+  width: 100%;
+  max-width: 220px; /* Keep compact size */
+  min-height: 200px;
+  margin: 0 auto; /* Center on mobile */
+}
+
+@media (min-width: 960px) {
+  .meal-image-container {
+    max-width: 220px;
+    min-height: 100%;
+    margin: 0; /* Reset location for side-by-side */
+  }
 }
 
 .hover-reveal {
