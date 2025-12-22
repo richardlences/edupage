@@ -1,10 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, Header
 from sqlalchemy.orm import Session
-from models import User
+from sqlalchemy import func
+from models import User, Rating, Photo
 from database import SessionLocal
-from edupage_service import EdupageService, SessionExpiredException
 from datetime import date, datetime
 from cache import lunch_cache
+from storage import get_storage_service
+from session_manager import get_client
+from edupage_internal import SessionExpiredException, EdupageException
 
 router = APIRouter(prefix="/lunches", tags=["lunches"])
 
@@ -18,17 +21,14 @@ def get_db():
 def get_current_user(user_id: str = Header(None), db: Session = Depends(get_db)):
     if not user_id:
         raise HTTPException(status_code=401, detail="Missing User ID")
+    # Cast to int for DB lookup
     user = db.query(User).filter(User.id == int(user_id)).first()
     if not user:
         raise HTTPException(status_code=401, detail="Invalid User")
     return user
 
-from sqlalchemy import func
-from models import Rating, Photo
-
 @router.get("/")
 def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    # day format YYYY-MM-DD
     if day:
         try:
             target_date = datetime.strptime(day, "%Y-%m-%d").date()
@@ -40,171 +40,162 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
     date_str = target_date.isoformat()
     
     # Check cache first
-    cached_lunches = lunch_cache.get(user.id, date_str)
+    lunches = lunch_cache.get(user.id, date_str)
     
-    if cached_lunches is None:
+    if lunches is None:
         # Cache miss - fetch from Edupage
-        service = EdupageService()
-        service.load_session_data(user.edupage_session_data)
-        
+        client = get_client(user)
         try:
-            lunches = service.get_lunches(target_date)
-        except SessionExpiredException as e:
-            # Session expired - clear session data and return 401
+            # fetch_week returns { "YYYY-MM-DD": meal_dict, ... }
+            week_data = client.get_meals_for_date(target_date)
+            
+            # Populate cache for ALL fetched days
+            for d_str, m_data in week_data.items():
+                lunch_cache.set(user.id, d_str, m_data)
+                
+            lunches = week_data.get(date_str)
+            
+        except SessionExpiredException:
             user.edupage_session_data = None
             db.commit()
             raise HTTPException(status_code=401, detail="Session expired, please log in again")
         except Exception as e:
             print(f"Error fetching lunches: {e}")
-            return []  # Return empty list if fetching fails
-        
-        # Store raw edupage data in cache
-        lunch_cache.set(user.id, date_str, lunches)
-    else:
-        lunches = cached_lunches
+            return []
     
-    # Serialize and enrich
+    if not lunches:
+        return []
+
+    # Prepare response
     results = []
     
-    # Check if we have a Meals object and if it has a lunch
-    current_lunch_meal = None
-    if lunches and hasattr(lunches, 'lunch') and lunches.lunch:
-        current_lunch_meal = lunches.lunch
+    # 'lunches' is a dict with keys: date, can_be_changed_until, ordered_meal, menus, boarder_id...
+    current_lunch_meal = lunches
+    can_be_changed_until = current_lunch_meal.get('can_be_changed_until')
+    
+    # Ordered logic: 'ordered_meal' is "A", "B", ...
+    ordered_letter = current_lunch_meal.get('ordered_meal')
+    ordered_number = None
+    if ordered_letter and ordered_letter in "ABCDEFGH":
+         ordered_number = str(ord(ordered_letter) - ord('A') + 1)
+
+    # Menus
+    menus = current_lunch_meal.get('menus', [])[:7] # Limit to 7 items
+    
+    storage = get_storage_service()
+    
+    for i, menu in enumerate(menus):
+        meal_name = menu['name']
+        menu_number = menu['number'] # e.g. "1", "2"
+        if menu_number:
+            menu_number = str(menu_number).strip()
+
+        # DB Queries for metadata
+        avg_rating = db.query(func.avg(Rating.stars)).filter(Rating.meal_identifier == meal_name).scalar()
+        user_rating = db.query(Rating.stars).filter(
+            Rating.user_id == user.id,
+            Rating.meal_identifier == meal_name
+        ).scalar()
         
-        # Get the deadline for changes (from the Meal object)
-        # This is when you can no longer order/cancel/change this lunch
-        can_be_changed_until = None
-        if hasattr(current_lunch_meal, 'can_be_changed_until'):
-            can_be_changed_until = current_lunch_meal.can_be_changed_until
+        photos = db.query(Photo).filter(Photo.meal_identifier == meal_name).all()
+        photo_list = [storage.get_url(p.photo_path) for p in photos]
+        user_has_photo = any(p.user_id == user.id for p in photos)
+        photo_url = photo_list[0] if photo_list else None
         
-        # Limit to first 7 meals (soup + 6 main meals)
-        # The rest are often weird text or invalid data
-        meals_to_process = list(current_lunch_meal)[:7]
-        
-        # Iterate over menus in the lunch
-        for i, menu in enumerate(meals_to_process):
-            # menu is a Menu object
-            meal_name = menu.name
+        # Determine if this specific menu item is ordered
+        is_ordered = False
+        if ordered_number and menu_number:
+            is_ordered = (menu_number == ordered_number)
             
-            # Get average rating from OUR database only (not edupage ratings)
-            avg_rating = db.query(func.avg(Rating.stars)).filter(Rating.meal_identifier == meal_name).scalar()
-            
-            # Get user's own rating for this meal
-            user_rating = db.query(Rating.stars).filter(
-                Rating.user_id == user.id,
-                Rating.meal_identifier == meal_name
-            ).scalar()
-            
-            from storage import get_storage_service
-            
-            # Get all photos
-            photos = db.query(Photo).filter(Photo.meal_identifier == meal_name).all()
-            photo_list = []
-            user_has_photo = False
-            storage = get_storage_service()
-            for p in photos:
-                photo_list.append(storage.get_url(p.photo_path))
-                if p.user_id == user.id:
-                    user_has_photo = True
-            
-            photo_url = photo_list[0] if photo_list else None
-            
-            # Check if ordered
-            # IMPORTANT: The edupage API uses DIFFERENT formats for ordered status:
-            # - ordered_meal is a LETTER: "A", "B", "C", "D", "E", "F", etc.
-            # - menu.number is a STRING NUMBER: "1", "2", "3", "4", "5", "6", etc. (or "None" for soup)
-            # We must convert: A=1, B=2, C=3, D=4, E=5, F=6, etc.
-            is_ordered = False
-            if current_lunch_meal.ordered_meal:
-                # Convert letter to number: A->1, B->2, C->3, etc.
-                ordered_letter = current_lunch_meal.ordered_meal.strip().upper()
-                if ordered_letter and ordered_letter in "ABCDEFGH":
-                    ordered_number = str(ord(ordered_letter) - ord('A') + 1)  # A=1, B=2, etc.
-                    
-                    # Compare with menu.number
-                    menu_number = str(menu.number).strip() if menu.number else ""
-                    is_ordered = (menu_number == ordered_number)
-            
-            results.append({
-                "index": i,  # Use 0-based index for ordering (this is what the API expects)
-                "name": meal_name,
-                "number": menu.number,  # Add menu number (e.g. "1", "2", "3" or "None" for soup)
-                "is_ordered": is_ordered,
-                "avg_rating": round(avg_rating, 1) if avg_rating else None,  # Only our app's rating
-                "user_rating": user_rating,  # User's own rating for this meal
-                "photo_url": photo_url,
-                "photos": photo_list,
-                "user_has_photo": user_has_photo,
-                "date": target_date.isoformat(),  # Add date for frontend logic
-                "can_be_changed_until": can_be_changed_until if can_be_changed_until else None  # Deadline for changes
-            })
+        results.append({
+            "index": i, 
+            "name": meal_name,
+            "number": menu_number,
+            "is_ordered": is_ordered,
+            "avg_rating": round(avg_rating, 1) if avg_rating else None,
+            "user_rating": user_rating,
+            "photo_url": photo_url,
+            "photos": photo_list,
+            "user_has_photo": user_has_photo,
+            "date": date_str,
+            "can_be_changed_until": can_be_changed_until
+        })
         
     return results
 
 
 @router.post("/order")
 def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    # We need to fetch lunches again to get the meal object
+    # meal_index expects 1-based index (menu number 1..N) corresponding to A..N
     target_date = datetime.strptime(day, "%Y-%m-%d").date()
-    service = EdupageService()
-    service.load_session_data(user.edupage_session_data)
+    client = get_client(user)
     
-    try:
-        lunches = service.get_lunches(target_date)
-    except SessionExpiredException:
-        user.edupage_session_data = None
-        db.commit()
-        raise HTTPException(status_code=401, detail="Session expired, please log in again")
+    # We need meal data first (to get boarder_id, etc.)
+    # Check cache first or fetch
+    lunches = lunch_cache.get(user.id, day)
     
-    if lunches and lunches.lunch:
-        # We are ordering a specific menu item from the lunch
-        # meal_index is 1-based index of the menu
+    if not lunches:
         try:
-            # We need to pass the EdupageModule to choose()
-            # But service.edupage is the Edupage object, which inherits/uses Module?
-            # The choose method expects 'edupage: EdupageModule'.
-            # The Edupage class in edupage-api seems to be the main entry point.
-            # Let's assume service.edupage is compatible.
-            lunches.lunch.choose(service.edupage, meal_index)
-            # Invalidate cache so next fetch reflects the new order
-            lunch_cache.invalidate(user.id, day)
-            return {"message": "Ordered"}
+            week_data = client.get_meals_for_date(target_date)
+            for d_str, m_data in week_data.items():
+                lunch_cache.set(user.id, d_str, m_data)
+            lunches = week_data.get(day)
         except SessionExpiredException:
             user.edupage_session_data = None
             db.commit()
-            raise HTTPException(status_code=401, detail="Session expired, please log in again")
-        except Exception as e:
-            print(f"Order error: {e}")
-            raise HTTPException(status_code=500, detail=f"Failed to order: {str(e)}")
-    else:
+            raise HTTPException(status_code=401, detail="Session expired")
+
+    if not lunches:
         raise HTTPException(status_code=404, detail="No lunch found for this day")
+        
+    # Convert index to letter
+    letters = "ABCDEFGH"
+    if 1 <= meal_index <= len(letters):
+        calc_letter = letters[meal_index - 1]
+    else:
+        raise HTTPException(status_code=400, detail="Invalid meal index")
+
+    try:
+        client.order(lunches, calc_letter)
+        # Invalidate cache
+        lunch_cache.invalidate(user.id, day)
+        return {"message": "Ordered"}
+    except SessionExpiredException:
+        user.edupage_session_data = None
+        db.commit()
+        raise HTTPException(status_code=401, detail="Session expired")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to order: {str(e)}")
 
 @router.post("/cancel")
 def cancel_lunch(meal_index: int, day: str, user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    # meal_index is ignored for cancel usually? Or strictly "sign off"?
+    # internal client cancel method takes meal_data
     target_date = datetime.strptime(day, "%Y-%m-%d").date()
-    service = EdupageService()
-    service.load_session_data(user.edupage_session_data)
+    client = get_client(user)
     
-    try:
-        lunches = service.get_lunches(target_date)
-    except SessionExpiredException:
-        user.edupage_session_data = None
-        db.commit()
-        raise HTTPException(status_code=401, detail="Session expired, please log in again")
-    
-    if lunches and lunches.lunch:
+    lunches = lunch_cache.get(user.id, day)
+    if not lunches:
         try:
-            lunches.lunch.sign_off(service.edupage)
-            # Invalidate cache so next fetch reflects the cancellation
-            lunch_cache.invalidate(user.id, day)
-            return {"message": "Canceled"}
+            week_data = client.get_meals_for_date(target_date)
+            for d_str, m_data in week_data.items():
+                lunch_cache.set(user.id, d_str, m_data)
+            lunches = week_data.get(day)
         except SessionExpiredException:
             user.edupage_session_data = None
             db.commit()
-            raise HTTPException(status_code=401, detail="Session expired, please log in again")
-        except Exception as e:
-            print(f"Cancel error: {e}")
-            raise HTTPException(status_code=500, detail=f"Failed to cancel: {str(e)}")
-    else:
-        raise HTTPException(status_code=404, detail="No lunch found for this day")
+            raise HTTPException(status_code=401, detail="Session expired")
 
+    if not lunches:
+         raise HTTPException(status_code=404, detail="No lunch found")
+         
+    try:
+        client.cancel(lunches)
+        lunch_cache.invalidate(user.id, day)
+        return {"message": "Canceled"}
+    except SessionExpiredException:
+        user.edupage_session_data = None
+        db.commit()
+        raise HTTPException(status_code=401, detail="Session expired")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to cancel: {str(e)}")

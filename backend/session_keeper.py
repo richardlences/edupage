@@ -12,7 +12,8 @@ from sqlalchemy.orm import Session
 
 from database import SessionLocal
 from models import User
-from edupage_service import EdupageService, SessionExpiredException
+from edupage_internal import SessionExpiredException
+from session_manager import get_client, clear_session
 
 logger = logging.getLogger(__name__)
 
@@ -42,18 +43,23 @@ def ping_all_sessions():
         
         for user in users:
             try:
-                service = EdupageService()
-                service.load_session_data(user.edupage_session_data)
+                # get_client will load into memory if not present (warmup)
+                client = get_client(user)
                 
-                # Try to ping the session by fetching today's meals
-                # This is a lightweight call that will fail if session is expired
-                service.ping_session()
+                # Ping by fetching today's meals (lightweight check)
+                # Since this is "internal" client now, just running a fetch is good.
+                # get_meals_for_date might be "heavy" (week fetch), but it's fine for pings every 30m.
+                # Alternatively, we could add a lighter ping method to client, but this ensures functionality.
+                client.get_meals_for_date(date.today())
                 
                 logger.debug(f"Session keeper: Session for user {user.id} is still alive")
                 
             except SessionExpiredException:
                 logger.warning(f"Session keeper: Session expired for user {user.id}, clearing session data")
                 user.edupage_session_data = None
+                
+                # Also clear from memory
+                clear_session(user.id)
                 db.commit()
                 
             except Exception as e:
