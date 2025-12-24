@@ -20,6 +20,7 @@ logging.basicConfig(
 async def lifespan(app: FastAPI):
     """Lifespan context manager for startup and shutdown events."""
     # Startup
+    Base.metadata.create_all(bind=engine)
     from session_keeper import start_scheduler
     start_scheduler()
     
@@ -41,7 +42,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)  # Moved to lifespan
 
 from fastapi.staticfiles import StaticFiles
 from routers import auth, lunches, social

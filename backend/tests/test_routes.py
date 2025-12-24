@@ -10,25 +10,34 @@ client = TestClient(app)
 def mock_get_current_user():
     return User(id=1, edupage_username="testuser", edupage_session_data=b"mockdata")
 
+def mock_get_db():
+    db = MagicMock()
+    yield db
+
 @pytest.fixture
-def override_auth(monkeypatch):
-    """Overrides the get_current_user dependency"""
+def override_auth_and_db():
+    """Overrides dependencies for auth and db"""
     app.dependency_overrides = {}
     
-    # We need to find exactly where get_current_user is imported/used in routers
-    from routers.lunches import get_current_user as lunches_get_user
-    app.dependency_overrides[lunches_get_user] = mock_get_current_user
+    from routers.lunches import get_current_user, get_db
+    app.dependency_overrides[get_current_user] = mock_get_current_user
+    app.dependency_overrides[get_db] = mock_get_db
 
     yield
     app.dependency_overrides = {}
 
 @patch("routers.lunches.lunch_cache")
 @patch("routers.lunches.get_client")
-def test_get_lunches_success(mock_get_client, mock_cache, override_auth):
+def test_get_lunches_success(mock_get_client, mock_cache, override_auth_and_db):
     # Mock cache miss
     mock_cache.get.return_value = None
     
-    # Mock client and response
+    # Mock database session
+    mock_db = next(mock_get_db())
+    # Mock the chain db.query(...).filter(...).scalar() or .all()
+    # We can just make it return None/empty for ratings/photos
+    mock_db.query.return_value.filter.return_value.scalar.return_value = None
+    mock_db.query.return_value.filter.return_value.all.return_value = []
     mock_edupage_client = MagicMock()
     mock_get_client.return_value = mock_edupage_client
     
@@ -53,7 +62,7 @@ def test_get_lunches_success(mock_get_client, mock_cache, override_auth):
 
 @patch("routers.lunches.lunch_cache")
 @patch("routers.lunches.get_client")
-def test_get_lunches_not_logged_in(mock_get_client, mock_cache, override_auth):
+def test_get_lunches_not_logged_in(mock_get_client, mock_cache, override_auth_and_db):
     from edupage_internal import NotLoggedInException
     
     mock_cache.get.return_value = None
