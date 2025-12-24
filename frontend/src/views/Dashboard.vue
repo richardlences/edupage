@@ -179,12 +179,7 @@
                     class="meal-image-container position-relative d-flex align-center justify-center shrink-0" 
                     :class="isDark ? 'bg-grey-darken-4' : 'bg-grey-lighten-4'" 
                   >
-                    <!-- Ordered Badge -->
-                    <div v-if="lunch.is_ordered" class="position-absolute z-index-10" style="top: 8px; left: 8px;">
-                      <v-chip color="success" variant="flat" size="small" class="font-weight-bold elevation-2" prepend-icon="mdi-check-circle">
-                        ORDERED
-                      </v-chip>
-                    </div>
+                    <!-- Ordered Badge Removed from here -->
 
                     <!-- Image Carousel -->
                     <v-carousel
@@ -282,9 +277,9 @@
                             </span>
                           </v-avatar>
                           
-                          <!-- Dynamic Ordered Chip (Only if no photo) -->
+                          <!-- Dynamic Ordered Chip (Always show if ordered) -->
                           <v-chip 
-                            v-if="lunch.is_ordered && (!lunch.photos || lunch.photos.length === 0)"
+                            v-if="lunch.is_ordered"
                             color="success" 
                             variant="flat" 
                             size="x-small"

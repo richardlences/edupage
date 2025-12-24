@@ -7,7 +7,7 @@ from datetime import date, datetime
 from cache import lunch_cache
 from storage import get_storage_service
 from session_manager import get_client
-from edupage_internal import SessionExpiredException, EdupageException
+from edupage_internal import SessionExpiredException, EdupageException, NotLoggedInException
 
 router = APIRouter(prefix="/lunches", tags=["lunches"])
 
@@ -58,6 +58,9 @@ def get_lunches(day: str = None, user: User = Depends(get_current_user), db: Ses
         except SessionExpiredException:
             user.edupage_session_data = None
             db.commit()
+            raise HTTPException(status_code=401, detail="Session expired, please log in again")
+        except NotLoggedInException:
+            # Also raise 401 if not logged in (e.g. session cleared/missing)
             raise HTTPException(status_code=401, detail="Session expired, please log in again")
         except Exception as e:
             print(f"Error fetching lunches: {e}")
@@ -144,6 +147,8 @@ def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user
             user.edupage_session_data = None
             db.commit()
             raise HTTPException(status_code=401, detail="Session expired")
+        except NotLoggedInException:
+            raise HTTPException(status_code=401, detail="Session expired")
 
     if not lunches:
         raise HTTPException(status_code=404, detail="No lunch found for this day")
@@ -163,6 +168,8 @@ def order_lunch(meal_index: int, day: str, user: User = Depends(get_current_user
     except SessionExpiredException:
         user.edupage_session_data = None
         db.commit()
+        raise HTTPException(status_code=401, detail="Session expired")
+    except NotLoggedInException:
         raise HTTPException(status_code=401, detail="Session expired")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to order: {str(e)}")
@@ -185,6 +192,8 @@ def cancel_lunch(meal_index: int, day: str, user: User = Depends(get_current_use
             user.edupage_session_data = None
             db.commit()
             raise HTTPException(status_code=401, detail="Session expired")
+        except NotLoggedInException:
+            raise HTTPException(status_code=401, detail="Session expired")
 
     if not lunches:
          raise HTTPException(status_code=404, detail="No lunch found")
@@ -196,6 +205,8 @@ def cancel_lunch(meal_index: int, day: str, user: User = Depends(get_current_use
     except SessionExpiredException:
         user.edupage_session_data = None
         db.commit()
+        raise HTTPException(status_code=401, detail="Session expired")
+    except NotLoggedInException:
         raise HTTPException(status_code=401, detail="Session expired")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to cancel: {str(e)}")

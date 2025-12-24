@@ -180,8 +180,13 @@ class EdupageClient:
         evidencia = raw.get("evidencia")
         if evidencia:
             status = evidencia.get("stav")
-            if status == "V": # V means chosen/ordered
-                ordered_meal_status = evidencia.get("obj") # e.g. "A", "B"...
+            # Correct logic based on debugging:
+            # 1. If 'stav' is the letter itself (e.g. "B"), use it.
+            # 2. If 'stav' is "V" (or "E" - observed in wild), use 'obj'.
+            if status and status in "ABCDEFGH":
+                ordered_meal_status = status
+            elif status == "V" or status == "E":
+                ordered_meal_status = evidencia.get("obj")
 
         # Deadline
         can_change_str = raw.get("zmen_do")

@@ -18,7 +18,7 @@ from session_manager import get_client, clear_session
 logger = logging.getLogger(__name__)
 
 # How often to ping sessions (in minutes)
-KEEP_ALIVE_INTERVAL_MINUTES = 30
+KEEP_ALIVE_INTERVAL_MINUTES = 10
 
 scheduler = BackgroundScheduler()
 
