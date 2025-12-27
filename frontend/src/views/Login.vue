@@ -50,7 +50,9 @@
                   variant="outlined"
                   color="deep-orange"
                   :bg-color="isDark ? 'grey-darken-3' : 'grey-lighten-5'"
-                  type="password"
+                  :type="visible ? 'text' : 'password'"
+                  :append-inner-icon="visible ? 'mdi-eye-off' : 'mdi-eye'"
+                  @click:append-inner="visible = !visible"
                   required
                   class="mb-6"
                   name="password"
@@ -120,6 +122,7 @@ const toggleLanguage = () => {
 
 const username = ref('')
 const password = ref('')
+const visible = ref(false)
 const error = ref('')
 const loading = ref(false)
 
