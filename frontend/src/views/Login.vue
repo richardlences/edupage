@@ -1,7 +1,10 @@
 <template>
   <v-app :class="isDark ? 'bg-background' : 'bg-grey-lighten-5'">
     <!-- Theme Toggle -->
-    <div class="position-absolute" style="top: 16px; right: 16px;">
+    <div class="position-absolute d-flex align-center" style="top: 16px; right: 16px;">
+      <v-btn icon variant="text" @click="toggleLanguage" class="mr-2">
+        <span class="text-button font-weight-bold">{{ locale.toUpperCase() }}</span>
+      </v-btn>
       <v-btn icon variant="text" @click="toggleTheme">
         <v-icon>{{ isDark ? 'mdi-weather-sunny' : 'mdi-weather-night' }}</v-icon>
       </v-btn>
@@ -16,20 +19,18 @@
             <v-avatar color="deep-orange" size="80" class="elevation-4 mb-4">
               <v-icon color="white" size="40">mdi-food-fork-drink</v-icon>
             </v-avatar>
-            <h1 class="text-h4 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">EduLunch</h1>
-            <p class="text-subtitle-1" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">Premium School Dining Experience</p>
+            <h1 class="text-h4 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ $t('app.title') }}</h1>
+            <p class="text-subtitle-1" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">{{ $t('app.subtitle') }}</p>
           </div>
 
           <v-card class="rounded-xl elevation-8" border>
             <v-card-text class="pa-8">
-              <h2 class="text-h5 font-weight-bold text-center mb-1" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">Welcome Back</h2>
-              <p class="text-center text-caption mb-6" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">
-                Please use your official <strong>Edupage</strong> credentials
-              </p>
+              <h2 class="text-h5 font-weight-bold text-center mb-1" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">{{ $t('login.welcome') }}</h2>
+              <p class="text-center text-caption mb-6" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'" v-html="$t('login.instruction')"></p>
               
               <v-form @submit.prevent="handleLogin">
                 <v-text-field
-                  label="Username"
+                  :label="$t('login.username')"
                   v-model="username"
                   prepend-inner-icon="mdi-account"
                   variant="outlined"
@@ -43,7 +44,7 @@
                 ></v-text-field>
                 
                 <v-text-field
-                  label="Password"
+                  :label="$t('login.password')"
                   v-model="password"
                   prepend-inner-icon="mdi-lock"
                   variant="outlined"
@@ -77,14 +78,14 @@
                   :loading="loading"
                   height="56"
                 >
-                  Sign In
+                  {{ $t('login.sign_in') }}
                 </v-btn>
               </v-form>
             </v-card-text>
           </v-card>
           
           <div class="text-center mt-6 text-caption text-grey">
-            &copy; {{ new Date().getFullYear() }} EduLunch App
+            &copy; {{ new Date().getFullYear() }} {{ $t('app.copyright') }}
           </div>
         </v-col>
       </v-row>
@@ -97,16 +98,24 @@ import { ref, computed, onMounted } from 'vue'
 import { useAuthStore } from '../stores/auth'
 import { useRouter } from 'vue-router'
 import { useTheme } from 'vuetify'
+import { useI18n } from 'vue-i18n'
 
 const authStore = useAuthStore()
 const router = useRouter()
 const theme = useTheme()
+const { t, locale } = useI18n()
 
 // Theme Logic
 const isDark = computed(() => theme.current.value.dark)
 const toggleTheme = () => {
     theme.toggle()
     localStorage.setItem('theme', theme.name.value)
+}
+
+const toggleLanguage = () => {
+    const newLocale = locale.value === 'en' ? 'sk' : 'en'
+    locale.value = newLocale
+    localStorage.setItem('locale', newLocale)
 }
 
 const username = ref('')
@@ -122,10 +131,10 @@ const handleLogin = async () => {
     if (success) {
       router.push('/')
     } else {
-      error.value = 'Invalid credentials'
+      error.value = t('login.invalid_credentials')
     }
   } catch (e) {
-    error.value = 'An error occurred'
+    error.value = t('login.error')
   } finally {
     loading.value = false
   }

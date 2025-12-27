@@ -13,17 +13,27 @@
         
         <div class="d-flex flex-column">
           <v-toolbar-title class="font-weight-black text-h6 text-white" style="line-height: 1.1;">
-            EduLunch
+            {{ $t('app.title') }}
           </v-toolbar-title>
-          <span class="text-caption text-white font-weight-medium" style="opacity: 0.9;">Premium School Dining</span>
+          <span class="text-caption text-white font-weight-medium" style="opacity: 0.9;">{{ $t('app.short_subtitle') }}</span>
         </div>
         
         <v-spacer></v-spacer>
         
         <div class="d-flex align-center">
           <span class="text-body-2 mr-4 text-white font-weight-medium hidden-sm-and-down">
-            Hello, {{ authStore.user?.username }}
+            {{ $t('dashboard.hello', { name: authStore.user?.username }) }}
           </span>
+          
+          <v-btn 
+            icon 
+            variant="text" 
+            color="white" 
+            class="mr-2"
+            @click="toggleLanguage"
+          >
+            <span class="text-button font-weight-bold">{{ locale.toUpperCase() }}</span>
+          </v-btn>
           
           <v-btn 
             icon 
@@ -43,7 +53,7 @@
             prepend-icon="mdi-logout"
             @click="handleLogout"
           >
-            Logout
+            {{ $t('dashboard.logout') }}
           </v-btn>
         </div>
       </v-container>
@@ -80,7 +90,7 @@
                 <v-icon color="white" size="18">mdi-check</v-icon>
               </v-avatar>
               <div style="min-width: 0;">
-                <div class="text-caption font-weight-bold mb-0" style="font-size: 0.65rem !important; line-height: 1;" :class="isDark ? 'text-green-lighten-2' : 'text-green-darken-3'">YOU HAVE ORDERED</div>
+                <div class="text-caption font-weight-bold mb-0" style="font-size: 0.65rem !important; line-height: 1;" :class="isDark ? 'text-green-lighten-2' : 'text-green-darken-3'">{{ $t('dashboard.ordered_label') }}</div>
                 <div class="text-subtitle-1 font-weight-black" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'" style="line-height: 1.2; white-space: normal;">
                   {{ orderedLunch.name }}
                 </div>
@@ -98,7 +108,7 @@
                 :disabled="refreshing"
                 @click="cancelLunch(orderedLunch.index)"
               >
-                Cancel
+                {{ $t('dashboard.cancel') }}
               </v-btn>
               <v-chip
                 v-else
@@ -107,7 +117,7 @@
                 class="font-weight-bold"
                 prepend-icon="mdi-check-circle"
               >
-                Confirmed
+                {{ $t('dashboard.confirmed') }}
               </v-chip>
             </div>
           </div>
@@ -116,7 +126,7 @@
         <!-- Initial Loading State -->
         <div v-if="loading && (!lunches || lunches.length === 0)" class="d-flex flex-column align-center justify-center py-16">
           <v-progress-circular indeterminate color="deep-orange" size="64" width="6"></v-progress-circular>
-          <div class="mt-4 text-h6 font-weight-light" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">Preparing menu...</div>
+          <div class="mt-4 text-h6 font-weight-light" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">{{ $t('dashboard.preparing_menu') }}</div>
         </div>
 
         <!-- Error State -->
@@ -136,8 +146,8 @@
           <v-avatar :color="isDark ? 'grey-darken-3' : 'grey-lighten-4'" size="120" class="mb-6">
             <v-icon size="64" :color="isDark ? 'grey-darken-1' : 'grey-lighten-1'">mdi-silverware-clean</v-icon>
           </v-avatar>
-          <div class="text-h5 font-weight-bold" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-2'">No Service Today</div>
-          <div class="text-body-1 mt-2" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">The kitchen is closed for this date.</div>
+          <div class="text-h5 font-weight-bold" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-2'">{{ $t('dashboard.no_service_title') }}</div>
+          <div class="text-body-1 mt-2" :class="isDark ? 'text-medium-emphasis' : 'text-grey-darken-1'">{{ $t('dashboard.no_service_desc') }}</div>
         </div>
 
         <!-- Lunches List -->
@@ -154,7 +164,7 @@
             <div class="px-4 py-2 d-flex align-center">
               <v-icon color="deep-orange" class="mr-3" size="small">mdi-bowl-mix</v-icon>
               <div class="d-flex flex-column">
-                <span class="text-caption font-weight-bold text-deep-orange text-uppercase" style="line-height: 1; font-size: 0.65rem !important;">Soup of the Day</span>
+                <span class="text-caption font-weight-bold text-deep-orange text-uppercase" style="line-height: 1; font-size: 0.65rem !important;">{{ $t('dashboard.soup_label') }}</span>
                 <div class="text-subtitle-1 font-weight-bold mt-0" :class="isDark ? 'text-high-emphasis' : 'text-grey-darken-3'">
                   {{ soup.name }}
                 </div>
@@ -223,10 +233,10 @@
                         </template>
                         <v-list density="compact" elevation="3" class="rounded-lg">
                           <v-list-item @click="triggerFileInput(lunch.index)" prepend-icon="mdi-upload" class="text-body-2">
-                            <v-list-item-title>Change Photo</v-list-item-title>
+                            <v-list-item-title>{{ $t('dashboard.change_photo') }}</v-list-item-title>
                           </v-list-item>
                           <v-list-item @click="deletePhoto(lunch.name)" prepend-icon="mdi-delete" class="text-error text-body-2">
-                            <v-list-item-title>Remove Photo</v-list-item-title>
+                            <v-list-item-title>{{ $t('dashboard.remove_photo') }}</v-list-item-title>
                           </v-list-item>
                         </v-list>
                       </v-menu>
@@ -286,7 +296,7 @@
                             class="font-weight-bold px-2"
                             prepend-icon="mdi-check-circle"
                           >
-                            ORDERED
+                            {{ $t('dashboard.ordered') }}
                           </v-chip>
                         </div>
                         
@@ -315,7 +325,7 @@
                             @click="triggerFileInput(lunch.index)"
                             style="height: 24px;"
                           >
-                            Add Photo
+                            {{ $t('dashboard.add_photo') }}
                           </v-btn>
                           <input 
                             type="file" 
@@ -327,7 +337,7 @@
                         </div>
                         <div v-else class="text-caption d-flex align-center" :class="isDark ? 'text-grey-lighten-1' : 'text-grey-darken-1'" style="font-size: 0.75rem !important;">
                           <v-icon size="x-small" class="mr-1">mdi-camera-off</v-icon>
-                          No photos yet
+                          {{ $t('dashboard.no_photos') }}
                         </div>
                       </div>
                     </div>
@@ -337,7 +347,7 @@
                       <!-- Rating Area (Only show if user can rate) -->
                       <div class="d-flex flex-column" v-if="canRateMeal(lunch)">
                         <span class="text-caption font-weight-bold mb-0" style="font-size: 0.6rem !important;" :class="lunch.is_ordered ? 'text-green-darken-2' : 'text-grey-darken-1'">
-                          RATE MEAL
+                          {{ $t('dashboard.rate_meal') }}
                         </span>
                         <v-rating
                           v-model="userRatings[lunch.name]"
@@ -376,7 +386,7 @@
                           @click="cancelLunch(lunch.index)"
                           class="text-capitalize font-weight-bold"
                         >
-                          Cancel Order
+                          {{ $t('dashboard.cancel_order') }}
                         </v-btn>
                         
                         <!-- Order Button -->
@@ -391,7 +401,7 @@
                           @click="orderLunch(lunch.index)"
                           class="text-capitalize font-weight-bold px-6"
                         >
-                          Order Meal
+                          {{ $t('dashboard.order_meal') }}
                         </v-btn>
                       </div>
                     </div>
@@ -448,10 +458,12 @@ import api from '@/api';
 import { useRouter } from 'vue-router';
 import { useTheme } from 'vuetify';
 import imageCompression from 'browser-image-compression';
+import { useI18n } from 'vue-i18n';
 
 const authStore = useAuthStore();
 const router = useRouter();
 const theme = useTheme();
+const { t, locale } = useI18n();
 
 // Theme Logic
 const isDark = computed(() => theme.current.value.dark);
@@ -459,6 +471,12 @@ const toggleTheme = () => {
   theme.toggle();
   localStorage.setItem('theme', theme.name.value);
 };
+
+const toggleLanguage = () => {
+    const newLocale = locale.value === 'en' ? 'sk' : 'en'
+    locale.value = newLocale
+    localStorage.setItem('locale', newLocale)
+}
 
 const currentDate = ref(new Date());
 const lunches = ref<any[]>([]);
@@ -495,7 +513,7 @@ const openLightbox = (photos: string[], index: number) => {
 };
 
 const deletePhoto = async (mealName: string) => {
-  if (!confirm('Are you sure you want to remove your photo?')) return;
+  if (!confirm(t('dialogs.remove_photo_confirm'))) return;
   
   actionLoading.value[mealName] = true;
   try {
@@ -506,7 +524,7 @@ const deletePhoto = async (mealName: string) => {
     });
     await fetchLunches();
   } catch (e) {
-    alert('Failed to delete photo.');
+    alert(t('errors.delete_photo_failed'));
     console.error(e);
   } finally {
     actionLoading.value[mealName] = false;
@@ -514,7 +532,7 @@ const deletePhoto = async (mealName: string) => {
 };
 
 const formattedDate = computed(() => {
-  return currentDate.value.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+  return currentDate.value.toLocaleDateString(locale.value === 'sk' ? 'sk-SK' : 'en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 });
 
 const orderedLunch = computed(() => {
@@ -524,7 +542,7 @@ const orderedLunch = computed(() => {
 });
 
 const dayName = computed(() => {
-  return currentDate.value.toLocaleDateString('en-US', { weekday: 'long' });
+  return currentDate.value.toLocaleDateString(locale.value === 'sk' ? 'sk-SK' : 'en-US', { weekday: 'long' });
 });
 
 // Filter soup and main meals
@@ -576,9 +594,9 @@ const canModifyLunch = (lunch: any) => {
 const getModificationMessage = (lunch: any) => {
     if (!canModifyLunch(lunch)) {
         if (lunch.is_ordered) {
-            return "Too late to change order";
+            return t('dashboard.status.too_late');
         } else {
-            return "Ordering closed";
+            return t('dashboard.status.ordering_closed');
         }
     }
     return null;
@@ -639,7 +657,7 @@ const fetchLunches = async (forceRefresh = false) => {
     console.error(e);
     // Only show error if we don't have cached data to show and this is still current
     if (requestId === lastRequestId.value && (!cached || cached.length === 0)) {
-      error.value = 'Failed to load lunches.';
+      error.value = t('errors.fetch_failed') || 'Failed to load lunches.';
     }
   } finally {
     // Only clear loading state if this is still the latest request
@@ -677,7 +695,7 @@ const orderLunch = async (index: number) => {
     });
     await fetchLunches();
   } catch (e) {
-    alert('Failed to order lunch.');
+    alert(t('errors.order_failed'));
   } finally {
     actionLoading.value[mealKey] = false;
   }
@@ -688,7 +706,7 @@ const cancelLunch = async (index: number) => {
   deadline.setDate(deadline.getDate() - 1);
   deadline.setHours(14, 0, 0, 0);
   if (new Date() > deadline) {
-    if (!confirm("Are you sure you want to cancel your lunch? You can't reorder if you cancel now.")) return;
+    if (!confirm(t('dialogs.cancel_lunch_confirm'))) return;
   }
   const dateStr = currentDate.value.toISOString().split('T')[0];
   const mealKey = `cancel-${index}`;
@@ -699,7 +717,7 @@ const cancelLunch = async (index: number) => {
     });
     await fetchLunches();
   } catch (e) {
-    alert('Failed to cancel lunch.');
+    alert(t('errors.cancel_failed'));
   } finally {
     actionLoading.value[mealKey] = false;
   }
@@ -758,7 +776,7 @@ const handleFileUpload = async (event: Event, mealName: string) => {
       if (e.response && e.response.status === 400) {
         alert(e.response.data.detail);
       } else {
-        alert('Failed to upload photo.');
+        alert(t('errors.upload_failed'));
       }
       console.error(e);
     } finally {

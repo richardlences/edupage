@@ -1,0 +1,59 @@
+{
+    "app": {
+        "title": "EduLunch",
+        "subtitle": "Prémiový zážitok zo školského stravovania",
+        "short_subtitle": "Prémiové školské stravovanie",
+        "copyright": "Aplikácia EduLunch"
+    },
+    "login": {
+        "welcome": "Vitajte späť",
+        "instruction": "Prosím, použite svoje oficiálne <strong>Edupage</strong> prihlasovacie údaje",
+        "username": "Používateľské meno",
+        "password": "Heslo",
+        "sign_in": "Prihlásiť sa",
+        "invalid_credentials": "Nesprávne prihlasovacie údaje",
+        "error": "Vyskytla sa chyba"
+    },
+    "dashboard": {
+        "hello": "Ahoj, {name}",
+        "logout": "Odhlásiť",
+        "ordered_label": "OBJEDNALI STE SI",
+        "cancel": "Zrušiť",
+        "confirmed": "Potvrdené",
+        "preparing_menu": "Pripravujeme menu...",
+        "no_service_title": "Dnes sa nevarí",
+        "no_service_desc": "Kuchyňa je v tento deň zatvorená.",
+        "soup_label": "Polievka dňa",
+        "change_photo": "Zmeniť fotku",
+        "remove_photo": "Odstrániť fotku",
+        "add_photo": "Pridať fotku",
+        "no_photos": "Zatiaľ žiadne fotky",
+        "rate_meal": "HODNOTIŤ JEDLO",
+        "status": {
+            "too_late": "Príliš neskoro na zmenu objednávky",
+            "ordering_closed": "Objednávanie uzavreté"
+        },
+        "cancel_order": "Zrušiť objednávku",
+        "order_meal": "Objednať jedlo",
+        "ordered": "OBJEDNANÉ"
+    },
+    "dialogs": {
+        "remove_photo_confirm": "Ste si istí, že chcete odstrániť svoju fotku?",
+        "cancel_lunch_confirm": "Ste si istí, že chcete zrušiť obed? Ak ho zrušíte teraz, už si ho nebudete môcť znova objednať."
+    },
+    "errors": {
+        "delete_photo_failed": "Nepodarilo sa odstrániť fotku.",
+        "order_failed": "Nepodarilo sa objednať obed.",
+        "cancel_failed": "Nepodarilo sa zrušiť obed.",
+        "upload_failed": "Nepodarilo sa nahrať fotku.",
+        "fetch_failed": "Nepodarilo sa načítať obedy."
+    },
+    "theme": {
+        "dark": "Tmavý režim",
+        "light": "Svetlý režim"
+    },
+    "language": {
+        "en": "Angličtina",
+        "sk": "Slovenčina"
+    }
+}

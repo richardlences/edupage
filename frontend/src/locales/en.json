@@ -1,0 +1,59 @@
+{
+    "app": {
+        "title": "EduLunch",
+        "subtitle": "Premium School Dining Experience",
+        "short_subtitle": "Premium School Dining",
+        "copyright": "EduLunch App"
+    },
+    "login": {
+        "welcome": "Welcome Back",
+        "instruction": "Please use your official <strong>Edupage</strong> credentials",
+        "username": "Username",
+        "password": "Password",
+        "sign_in": "Sign In",
+        "invalid_credentials": "Invalid credentials",
+        "error": "An error occurred"
+    },
+    "dashboard": {
+        "hello": "Hello, {name}",
+        "logout": "Logout",
+        "ordered_label": "YOU HAVE ORDERED",
+        "cancel": "Cancel",
+        "confirmed": "Confirmed",
+        "preparing_menu": "Preparing menu...",
+        "no_service_title": "No Service Today",
+        "no_service_desc": "The kitchen is closed for this date.",
+        "soup_label": "Soup of the Day",
+        "change_photo": "Change Photo",
+        "remove_photo": "Remove Photo",
+        "add_photo": "Add Photo",
+        "no_photos": "No photos yet",
+        "rate_meal": "RATE MEAL",
+        "status": {
+            "too_late": "Too late to change order",
+            "ordering_closed": "Ordering closed"
+        },
+        "cancel_order": "Cancel Order",
+        "order_meal": "Order Meal",
+        "ordered": "ORDERED"
+    },
+    "dialogs": {
+        "remove_photo_confirm": "Are you sure you want to remove your photo?",
+        "cancel_lunch_confirm": "Are you sure you want to cancel your lunch? You can't reorder if you cancel now."
+    },
+    "errors": {
+        "delete_photo_failed": "Failed to delete photo.",
+        "order_failed": "Failed to order lunch.",
+        "cancel_failed": "Failed to cancel lunch.",
+        "upload_failed": "Failed to upload photo.",
+        "fetch_failed": "Failed to load lunches."
+    },
+    "theme": {
+        "dark": "Dark Mode",
+        "light": "Light Mode"
+    },
+    "language": {
+        "en": "English",
+        "sk": "Slovak"
+    }
+}
